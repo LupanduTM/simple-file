@@ -1,0 +1,28 @@
+server:
+  port: 8082 # Unique port for QRGS, e.g., 8082
+
+spring:
+  application:
+    name: qr-code-generation-service # Name for Eureka registration
+
+eureka:
+  client:
+    enabled: false
+  # serviceUrl:
+  #    defaultZone: http://localhost:8761/eureka # URL of your Eureka Server
+  #  fetch-registry: true
+  #  register-with-eureka: true
+  instance:
+    hostname: localhost
+
+# QR Code Configuration (optional, for default size/color)
+qrcode:
+  width: 300
+  height: 300
+  format: PNG
+  charset: UTF-8
+
+# Encryption secret for QR payload (for testing, use a simple one)
+qr:
+  encryption:
+    secret-key: aVerySimpleTestSecretKeyForQrEncryption
