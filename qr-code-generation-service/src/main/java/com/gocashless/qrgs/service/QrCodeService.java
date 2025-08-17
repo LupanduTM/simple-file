@@ -86,7 +86,7 @@ public class QrCodeService {
         qrPayload.put("transactionRef", transactionRef);
         qrPayload.put("timestamp", Instant.now().toEpochMilli());
         // In a real system, you'd add a digital signature here for integrity verification
-        // qrPayload.put("signature", generateSignature(qrPayloadJsonString));
+       // qrPayload.put("signature", generateSignature(qrPayloadJsonString));
 
         // 5. Encrypt the payload
         String encryptedPayload = encryptionService.encryptPayload(qrPayload);
