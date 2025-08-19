@@ -1,0 +1,47 @@
+Gocashless Project To-Do List
+
+**Backend Development**
+
+1.  **Set Up Service Discovery (Eureka Server):**
+    *   Create a new Spring Boot application for the Eureka server.
+    *   This is crucial for microservice communication.
+
+2.  **Create a `payment-service`:**
+    *   Integrate with the MTN Mobile Money API.
+    *   Manage transactions (save, update status).
+    *   Orchestrate the payment flow.
+
+3.  **Implement a `notification-service`:**
+    *   Use WebSockets or Push Notifications (e.g., FCM).
+    *   Send real-time payment confirmations to the conductor's app.
+
+4.  **Add an API Gateway:**
+    *   Use Spring Cloud Gateway.
+    *   Create a single entry point for all frontend requests.
+
+5.  **Flesh out Existing Services:**
+    *   Add API endpoints for login, registration, fetching user profiles.
+    *   Add endpoints for managing routes and fares.
+
+**Frontend Development**
+
+1.  **Build React Native Mobile Apps:**
+    *   **Conductor App:**
+        *   Login
+        *   Destination selection
+        *   QR code display
+        *   Real-time payment notifications
+        *   Transaction history
+    *   **Passenger App:**
+        *   Login/registration
+        *   QR code scanner
+        *   Payment flow integration
+        *   Transaction history
+
+2.  **Build Next.js Web Application:**
+    *   **Bus Company Dashboard:**
+        *   Login for bus company owners.
+        *   View transactions from their conductors.
+        *   Register conductors and buses.
+    *   **Gocashless Admin Dashboard:**
+        *   Super-admin view of all users and transactions.
