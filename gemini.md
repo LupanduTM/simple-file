@@ -4,7 +4,7 @@ This document outlines my understanding of the Gocashless project, its goals, ar
 
 ## 1. Project Vision
 
-The primary goal of the Gocashless project is to modernize the payment system for public transportation in Zambia. It aims to replace cash transactions with a seamless digital payment solution using QR codes and mobile money, specifically targeting the MTN Mobile Money platform.
+The primary goal of the Gocashless project is to modernize the payment system for public transportation in Zambia. It aims to replace cash transactions with a seamless digital payment solution using QR codes and mobile money, specifically targeting the Airtel Money platform.
 
 ## 2. System Architecture
 
@@ -36,12 +36,28 @@ The backend consists of several independent microservices:
 
 ## 3. Current Status & Progress
 
-- **Backend**: The foundational services (`user-management`, `route-fare-management`, `qr-code-generation`) have been created and their dependencies are defined.
-- **Frontend**: The Next.js web application (`gocashless-web`) has been set up with a proper file structure.
+- **Backend**:
+  - The foundational services (`user-management`, `route-fare-management`, `qr-code-generation`) have been created and their dependencies are defined.
+  - A new `eureka` service has been added to the project.
+  - All existing backend services (`user-management-service`, `route-fare-management-service`, `qr-code-generation-service`) have been configured to register with the Eureka server by:
+    - Adding the `spring-cloud-starter-netflix-eureka-client` dependency to their `pom.xml` files.
+    - Configuring `eureka.client.serviceUrl.defaultZone` in their `application.yml` files.
+    - Adding/updating the `@EnableEurekaClient` annotation in their main application classes.
+  - **`payment-processing-service`**:
+    - The service has been scaffolded with a full project structure.
+    - DTOs for handling requests and responses with the Airtel Money API have been created.
+    - The `AirtelService` has been implemented to handle the authentication and payment initiation flows with the Airtel Money API.
+    - The `PaymentService` has been implemented to orchestrate the payment process.
+    - The `Transaction` entity has been updated to store comprehensive transaction details.
+- **Frontend**:
+  - The Next.js web application (`gocashless-web`) has been set up with a proper file structure.
   - We have built the UI for the login page and the registration page for the Bus Company dashboard.
   - The registration page is now connected to the `user-management-service` backend.
   - A CORS issue between the frontend and backend was identified and resolved by adding `@CrossOrigin` to the `UserController`.
   - The frontend's API client (`apiClient.js`) was temporarily configured to directly connect to the `user-management-service` (`http://localhost:7000`) for development and testing purposes.
+  - The home page for the `gocashless-web` application has been created using the `HOME_PAGE_MOCK.html` as a template.
+  - The CSS from the mock HTML has been integrated into `src/app/globals.css`.
+  - The "Login / Register" and "Get Started" buttons on the home page are now connected to the `/login` route.
 - **`todo.txt`**: A high-level project roadmap has been created and saved in the root directory.
 
 This file serves as a living document of our collaboration. I will refer to it to maintain context in our future sessions.

@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: payment-processing-service
+
+server:
+  port: 7003
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+airtel:
+  base-url: https://sandbox.airtel.africa/ # Replace with the actual sandbox URL
+  client-id: your-client-id
+  client-secret: your-client-secret

@@ -1,0 +1,59 @@
+Dashboard Page Explanation
+========================
+
+Overview
+--------
+The dashboard page is a central hub for bus company owners and admins to manage and view key aspects of the GoCashless system. It is built using React and Next.js, styled to match the register page, and organized for clarity and ease of use.
+
+Structure & Features
+--------------------
+- **Sidebar Navigation**: Allows switching between sections (Transactions, Conductors, Buses, Routes, Fares, Users).
+- **Main Content Area**: Displays the selected section's data and forms.
+- **Role-Based Views**: The dashboard adapts based on the user's role (company owner or admin). Admins see an extra 'Users' section.
+- **Sections**:
+  - **Transactions**: Lists transactions by conductors.
+  - **Conductors**: Lists conductors and provides a form to register new ones.
+  - **Buses**: Lists buses and provides a form to register new ones.
+  - **Routes & Fares**: Placeholders for future management UIs.
+  - **Users**: (Admin only) Lists all users.
+
+Design Rules Followed
+---------------------
+- **Consistent Styling**: Uses the same font, colors, and layout as the register page for a unified look.
+- **Component-Based**: Utilizes shared UI components (Button, Input, Icons) for maintainability.
+- **Responsive Layout**: Sidebar is hidden on small screens; main content adapts to screen size.
+- **Separation of Concerns**: Navigation and content are clearly separated.
+- **Role-Based Access**: Only admins see the 'Users' section.
+
+Connecting to the Backend
+-------------------------
+1. **API Client**: Use the provided `apiClient.js` and service files in `src/lib/api/` to make HTTP requests to backend endpoints.
+2. **Fetching Data**:
+   - Replace the example data arrays (transactions, conductors, etc.) with data fetched from backend APIs using `useEffect` and state.
+   - Example:
+     ```jsx
+     useEffect(() => {
+       apiClient.get('/api/conductors').then(setConductors);
+     }, []);
+     ```
+3. **Submitting Forms**:
+   - On form submit, send POST requests to backend endpoints to register new conductors, buses, etc.
+   - Example:
+     ```jsx
+     const handleRegisterConductor = async (e) => {
+       e.preventDefault();
+       await apiClient.post('/api/conductors', { name: conductorName });
+     };
+     ```
+4. **Role Management**:
+   - Use authentication logic (from `authStore.js` or `useAuth.js`) to determine the user's role and show/hide sections accordingly.
+5. **Error Handling**:
+   - Display error/success messages based on API responses.
+
+Next Steps
+----------
+- Replace placeholder data and forms with real API calls.
+- Expand the Routes and Fares sections with management UIs.
+- Add authentication and role logic for secure access.
+
+For further help, see the code in `src/app/(dashboard)/dashboard/page.jsx` and the API client/services in `src/lib/api/`.

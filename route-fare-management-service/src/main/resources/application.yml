@@ -1,6 +1,11 @@
 server:
   port: 7001
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
 spring:
   application:
     name: route-fare-management-service
@@ -17,12 +22,5 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka # URL of your Eureka Server
-    fetch-registry: true
-    register-with-eureka: true
-  instance:
-    hostname: localhost
+
 
