@@ -1,9 +1,38 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
-import { GoogleIcon, FacebookIcon, QrCodeIcon } from '@/components/ui/Icons'; // Placeholder for icons
+import { GoogleIcon, FacebookIcon, QrCodeIcon } from '@/components/ui/Icons';
+import { useAuth } from '@/hooks/useAuth';
+import { authService } from '@/lib/api/authService';
 
 const LoginPage = () => {
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const { login } = useAuth();
+  const router = useRouter();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const response = await authService.login(formData);
+      login(response.token);
+      router.push('/dashboard');
+    } catch (err) {
+      setError('Login failed. Please check your credentials.');
+      console.error('Login error:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen flex font-sans">
       {/* Left Branding Section */}
@@ -35,14 +64,15 @@ const LoginPage = () => {
             <p className="text-black">Please log in to your account.</p>
           </div>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-1 text-dark-text">Email or Phone</label>
-              <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+              <Input id="email" name="email" type="email" placeholder="you@example.com" required value={formData.email} onChange={handleChange} />
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium mb-1 text-dark-text">Password</label>
-              <Input id="password" name="password" type="password" placeholder="••••••••" required />
+              <Input id="password" name="password" type="password" placeholder="••••••••" required value={formData.password} onChange={handleChange} />
             </div>
 
             <div className="flex items-center justify-between text-sm">

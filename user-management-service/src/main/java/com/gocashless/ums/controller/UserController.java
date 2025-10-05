@@ -1,6 +1,7 @@
 package com.gocashless.ums.controller;
 
 import com.gocashless.ums.dto.UserRegistrationRequest;
+import com.gocashless.ums.dto.UserStatusUpdateRequest;
 import com.gocashless.ums.dto.UserUpdateRequest;
 import com.gocashless.ums.model.Role;
 import com.gocashless.ums.model.User;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/users")
@@ -24,6 +28,25 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<User> getMyProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userService.findUserByEmail(email)
+                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/register/admin")
+    public ResponseEntity<?> registerAdmin(@RequestBody UserRegistrationRequest request) {
+        try {
+            User newUser = userService.registerUser(request, Role.GOCASHLESS_ADMIN);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/register/passenger")
     public ResponseEntity<?> registerPassenger(@RequestBody UserRegistrationRequest request) {
         try {
@@ -33,15 +56,7 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/register/buscompany")
-    public ResponseEntity<?> registerBusCompany(@RequestBody UserRegistrationRequest request) {
-        try {
-            User newUser = userService.registerUser(request, Role.BUS_COMPANY_ADMIN);
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+
     @PostMapping("/register/conductor")
     public ResponseEntity<?> registerConductor(@RequestBody UserRegistrationRequest request) {
         try {
@@ -52,9 +67,22 @@ public class UserController {
         }
     }
 
+    @GetMapping("/admins")
+    public ResponseEntity<?> getAllAdmins() {
+        var admins = userService.getAllAdmins();
+        return new ResponseEntity<>(admins, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         return userService.findUserById(id)
+                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        return userService.findUserByEmail(email)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -71,12 +99,36 @@ public class UserController {
         }
     }
 
-    // Add endpoints for updating users, managing conductors/bus companies, etc.
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateUserStatus(@PathVariable UUID id, @RequestBody UserStatusUpdateRequest request) {
+        try {
+            User updatedUser = userService.updateUserStatus(id, request.getStatus());
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
 
-    @GetMapping("/bus-companies/{companyId}/conductors")
-    public ResponseEntity<?> getConductorsByBusCompany(@PathVariable UUID companyId) {
-        var conductors = userService.getConductorsByBusCompanyId(companyId);
+    @PostMapping("/{id}/reset-password")
+    public ResponseEntity<?> resetPassword(@PathVariable UUID id) {
+        try {
+            userService.resetPassword(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping("/conductors")
+    public ResponseEntity<?> getAllConductors() {
+        var conductors = userService.getAllConductors();
         return new ResponseEntity<>(conductors, HttpStatus.OK);
     }
-}
 
+    @GetMapping("/passengers")
+    public ResponseEntity<?> getAllPassengers() {
+        var passengers = userService.getAllPassengers();
+        return new ResponseEntity<>(passengers, HttpStatus.OK);
+    }
+}

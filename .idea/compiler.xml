@@ -7,25 +7,31 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="api-gateway" />
+        <module name="fake-pay" />
+        <module name="payment-processing-service" />
         <module name="eureka" />
+        <module name="notification-service" />
       </profile>
-      <profile name="Annotation profile for payment-processing-service" enabled="true">
+      <profile name="Annotation profile for user-management-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.m2/repository/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
-        <module name="payment-processing-service" />
-        <module name="qr-code-generation-service" />
         <module name="user-management-service" />
         <module name="route-fare-management-service" />
+        <module name="qr-code-generation-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-gateway" options="-parameters" />
       <module name="eureka" options="-parameters" />
+      <module name="fake-pay" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="payment-processing-service" options="-parameters" />
       <module name="qr-code-generation-service" options="-parameters" />
       <module name="route-fare-management-service" options="-parameters" />

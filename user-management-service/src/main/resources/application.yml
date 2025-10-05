@@ -9,6 +9,11 @@ eureka:
 spring:
   application:
     name: user-management-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 # PostgreSQL Database Configuration
   datasource:
@@ -26,5 +31,5 @@ spring:
 
 # JWT Secret (VERY IMPORTANT: Use a strong, securely stored secret in production)
 jwt:
-  secret: yourSuperSecretKeyForJWTTokenGenerationAndValidationWhichShouldBeLongAndComplex
-  expiration: 3600000 # 1 hour in milliseconds
+  secret: 4125442A472D4B6150645367566B5970337336763979244226452948404D6351
+  expiration: 86400000 # 24 hours in milliseconds

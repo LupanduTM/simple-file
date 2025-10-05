@@ -44,8 +44,6 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private UUID busCompanyId;
-
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

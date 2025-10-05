@@ -1,8 +1,9 @@
 package com.gocashless.rfms.dto;
 
 import lombok.Data;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; // Import LocalDateTime
 import java.util.UUID;
 
 @Data
@@ -12,6 +13,6 @@ public class FareRequest {
     private UUID destinationStopId;
     private BigDecimal amount;
     private String currency;
-    private LocalDateTime validFrom;
-    private LocalDateTime validTo;
+    private LocalDateTime validFrom; // Added
+    private LocalDateTime validTo;   // Added
 }

@@ -1,12 +1,34 @@
 
-import Navbar from '@/components/shared/Navbar';
+/* 'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function DashboardLayout({ children }) {
-  // Here you would add logic to protect this route
-  // For now, it just provides a layout with a navbar
+  const { token } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/login');
+    }
+  }, [token, router]);
+
+  if (!token) {
+    return null; // or a loading spinner
+  }
+
   return (
     <section>
-      <Navbar />
+      {children}
+    </section>
+  );
+} */
+
+export default function DashboardLayout({ children }) {
+  return (
+    <section>
       {children}
     </section>
   );

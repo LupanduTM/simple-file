@@ -43,18 +43,7 @@ public class QrCodeService {
      */
     public QrGenerateResponse generatePaymentQrCode(QrGenerateRequest request) throws Exception {
 
-        // --- TEMPORARY MOCK FOR RFMS CALL DURING STANDALONE TESTING ---
-        // In a real scenario, you would uncomment the RFMS call below.
-        /*
-        BigDecimal fareAmount = new BigDecimal("15.50"); // Dummy fare amount
-        String currency = "ZMW"; // Dummy currency
-        logger.warn("RFMS call is MOCKED. Using dummy fare: {} {}", fareAmount, currency);
-        // --- END OF TEMPORARY MOCK ---
-
-         */
-
-
-
+        // --- REAL SCENARIO ---
         // 2. Query RFMS to get the fare amount
         // Using Eureka service name for lookup
         String rfmsUrl = "http://ROUTE-FARE-MANAGEMENT-SERVICE/api/v1/fares/lookup";
@@ -72,7 +61,7 @@ public class QrCodeService {
 
         BigDecimal fareAmount = new BigDecimal(fareResponse.get("amount").asText());
         String currency = fareResponse.get("currency").asText();
-
+        // --- END OF REAL SCENARIO ---
 
 
         // 3. Generate a unique transaction reference

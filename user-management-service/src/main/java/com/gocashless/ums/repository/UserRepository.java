@@ -13,5 +13,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByPhoneNumber(String phoneNumber);
     boolean existsByUsername(String username);
     boolean existsByPhoneNumber(String phoneNumber);
-    java.util.List<User> findAllByRoleAndBusCompanyId(com.gocashless.ums.model.Role role, java.util.UUID busCompanyId);
+    java.util.List<User> findAllByRole(com.gocashless.ums.model.Role role);
+    Optional<User> findByEmail(String email);
 }

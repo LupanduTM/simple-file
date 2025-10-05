@@ -1,0 +1,103 @@
+# Prompt — Next.js Admin Dashboard (Passenger, Conductor, and Admin Management)
+
+You are building the **Admin Dashboard** for the GoCashless bus payment system using **Next.js (React)**. The dashboard must integrate with the **User Management Service (UMS)** backend. The focus is on **Passengers, Conductors, and Admins**. Each requires listing, CRUD operations, and role-based control.
+
+---
+
+## 1. Authentication & Authorization
+- Use **JWT authentication**.  
+- Protect all user management routes.  
+- Apply **role-based access control**:
+  - `GoCashless Admin`: full access to all users (passengers, conductors, admins).  
+  - `Bus Company Admin`: can only manage conductors for their company.  
+  - `Passenger`: cannot access dashboard.  
+
+---
+
+## 2. Pages to Implement
+
+### A. **Passenger Page**
+- **Purpose**: Display all registered passengers (role = `PASSENGER`).  
+- **UI/Features**:
+  - Table/List with columns: `Name`, `Email`, `Phone`, `Status (ACTIVE/INACTIVE/BLOCKED)`, `Created At`.  
+  - Search by name/email/phone.  
+  - Filter by status.  
+  - Actions per passenger:
+    - **View Profile** (GET `/api/v1/users/{id}`)  
+    - **Edit** (PUT `/api/v1/users/update/{id}` — update email, phone, first/last name).  
+    - **Change Status** (toggle ACTIVE/INACTIVE/BLOCKED).  
+    - **Delete** (optional — or mark as BLOCKED).  
+
+---
+
+### B. **Conductor Page**
+- **Purpose**: Manage conductors belonging to a bus company (role = `CONDUCTOR`).  
+- **UI/Features**:
+  - Table/List with: `Name`, `Email`, `Phone`, `Status`, `Assigned Bus Company`, `Created At`.  
+  - Search + filter by status/company.  
+  - **CRUD operations**:
+    - **Add New Conductor** (POST `/api/v1/users/register/conductor`) with form: username, password, email, phone, first/last name, busCompanyId.  
+    - **Edit Conductor** (PUT `/api/v1/users/update/{id}` — update contact info, name).  
+    - **Change Status** (set ACTIVE/INACTIVE/BLOCKED).  
+    - **Delete Conductor** (or mark BLOCKED).  
+  - Endpoint for listing by company: `GET /api/v1/users/bus-companies/{companyId}/conductors`.  
+
+---
+
+### C. **Admin Page (in Settings)**
+- **Purpose**: Allow registering new admins for bus companies or GoCashless itself.  
+- **UI/Features**:
+  - Table/List with: `Name`, `Email`, `Phone`, `Role (BUS_COMPANY_ADMIN or GOCASHLESS_ADMIN)`, `Status`.  
+  - Actions:
+    - **Add New Admin**:  
+      - Bus Company Admin → `POST /api/v1/users/register/buscompany`  
+      - GoCashless Admin → extend UMS to `POST /api/v1/users/register/admin` if not yet present.  
+    - **Edit Admin Profile** (PUT `/api/v1/users/update/{id}`).  
+    - **Change Status**.  
+    - **Delete / Block Admin** (soft delete via status change).  
+
+---
+
+## 3. Backend Integration
+Use these endpoints from UMS:
+- `POST /api/v1/users/register/passenger`  
+- `POST /api/v1/users/register/conductor`  
+- `POST /api/v1/users/register/buscompany`  
+- `GET /api/v1/users/{id}`  
+- `GET /api/v1/users/email/{email}`  
+- `PUT /api/v1/users/update/{id}`  
+- `GET /api/v1/users/bus-companies/{companyId}/conductors`  
+
+Add wrappers in `lib/apiClient.ts` for clean integration with JWT headers.
+
+---
+
+## 4. UI & UX Guidelines
+- **Sidebar Links**: Passengers, Conductors, Admins (under Settings).  
+- Use **tables with pagination** for large datasets.  
+- Forms with **react-hook-form + zod** validation.  
+- Modals for Add/Edit/Delete actions.  
+- Status toggles styled (green = ACTIVE, red = BLOCKED, grey = INACTIVE).  
+- Show confirmation before destructive actions.  
+
+---
+
+## 5. Expected Deliverables
+- **Components**:
+  - `components/Passengers/PassengerList.tsx`, `PassengerForm.tsx`  
+  - `components/Conductors/ConductorList.tsx`, `ConductorForm.tsx`  
+  - `components/Admins/AdminList.tsx`, `AdminForm.tsx`  
+- **Hooks**:
+  - `usePassengers.ts` (fetch, search, update)  
+  - `useConductors.ts` (CRUD + byCompany)  
+  - `useAdmins.ts` (CRUD)  
+- **API integration** in `lib/apiClient.ts` with JWT support.  
+- **Protected routes** that redirect to login if token is missing/invalid.  
+
+---
+
+## 6. Acceptance Criteria
+- Admin can **list, search, filter, add, edit, block/unblock** passengers, conductors, and admins.  
+- Conductor CRUD respects bus company scope.  
+- New Admin registration is possible via Settings.  
+- UI is responsive, secure, and integrates directly with the UMS endpoints.  

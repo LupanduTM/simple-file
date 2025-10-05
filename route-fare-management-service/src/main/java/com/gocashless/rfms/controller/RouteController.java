@@ -1,5 +1,6 @@
 package com.gocashless.rfms.controller;
 
+import com.gocashless.rfms.dto.RouteResponse;
 import com.gocashless.rfms.model.Route;
 import com.gocashless.rfms.service.RouteService;
 import com.gocashless.rfms.dto.RouteRequest;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/routes")
 public class RouteController {
@@ -33,13 +35,13 @@ public class RouteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Route>> getAllRoutes() {
-        List<Route> routes = routeService.getAllRoutes();
+    public ResponseEntity<List<RouteResponse>> getAllRoutes() {
+        List<RouteResponse> routes = routeService.getAllRoutes();
         return new ResponseEntity<>(routes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Route> getRouteById(@PathVariable UUID id) {
+    public ResponseEntity<RouteResponse> getRouteById(@PathVariable UUID id) {
         return routeService.getRouteById(id)
                 .map(route -> new ResponseEntity<>(route, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
