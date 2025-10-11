@@ -27,13 +27,9 @@ public class QrCodeController {
         this.qrCodeService = qrCodeService;
     }
 
-    /**
-     * Endpoint to generate a payment QR code.
-     * This would be called by the Conductor App.
-     *
-     * @param request The request containing details for QR code generation (e.g., conductor, route, stops).
-     * @return ResponseEntity with the Base64 encoded QR image and transaction reference.
-     */
+
+    // Endpoint to generate a payment QR code.
+
     @PostMapping("/generate")
     public ResponseEntity<?> generateQrCode(@RequestBody QrGenerateRequest request) {
         logger.info("Received QR code generation request: {}", request);

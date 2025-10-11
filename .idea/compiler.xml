@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
         <module name="fake-pay" />
-        <module name="payment-processing-service" />
         <module name="eureka" />
         <module name="notification-service" />
       </profile>
@@ -25,6 +24,9 @@
         <module name="qr-code-generation-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="payment-processing-service" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
