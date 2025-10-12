@@ -6,7 +6,7 @@ const API_BASE_URL = "http://192.168.137.74";
 export const getPassengerTransactions = async (userId) => {
   try {
     // Assuming the transaction-history-service is on port 8084
-    const response = await fetch(`${API_BASE_URL}:8084/api/v1/transactions/user/${userId}`);
+    const response = await fetch(`${API_BASE_URL}:7004/api/v1/transactions/user/${userId}`);
     
     if (!response.ok) {
       const errorData = await response.text();
