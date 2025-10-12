@@ -57,7 +57,10 @@ public class UserController {
         }
     }
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
     @PostMapping("/register/conductor")
+    @PreAuthorize("hasRole('GOCASHLESS_ADMIN')")
     public ResponseEntity<?> registerConductor(@RequestBody UserRegistrationRequest request) {
         try {
             User newUser = userService.registerUser(request, Role.CONDUCTOR);

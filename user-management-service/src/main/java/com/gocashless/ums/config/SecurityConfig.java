@@ -1,17 +1,22 @@
 package com.gocashless.ums.config;
 
+import com.gocashless.ums.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -29,10 +34,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for API endpoints
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/users/register/**", "/api/v1/auth/login", "/api/v1/users/**").permitAll() // Allow public access to registration and login
-                        .anyRequest().authenticated() // All other requests require authentication
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/passenger/**").hasRole(Role.PASSENGER.name())
+                        .requestMatchers("/api/conductor/**").hasRole(Role.CONDUCTOR.name())
+                        .requestMatchers("/api/admin/**
+").hasRole(Role.GOCASHLESS_ADMIN.name())
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 );
-        // You would add JWT filter here later
         return http.build();
     }
 }
