@@ -30,7 +30,7 @@ const SignInScreen = () => {
     setLoading(true);
     try {
       await signIn(email, password);
-      router.replace("/home");
+      router.replace("/(tabs)");
     } catch (error) {
       Alert.alert(
         "Login Failed",
@@ -86,6 +86,12 @@ const SignInScreen = () => {
                 <Text style={homeStyles.generateButtonText}>Sign In</Text>
               </>
             )}
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.replace("/sign-up")}>
+            <Text style={{ textAlign: 'center', marginTop: 15, color: COLORS.primary }}>
+              Don't have an account? Sign Up
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

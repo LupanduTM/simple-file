@@ -37,8 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/api/passenger/**").hasRole(Role.PASSENGER.name())
                         .requestMatchers("/api/conductor/**").hasRole(Role.CONDUCTOR.name())
-                        .requestMatchers("/api/admin/**
-").hasRole(Role.GOCASHLESS_ADMIN.name())
+                        .requestMatchers("/api/admin/**").hasRole(Role.GOCASHLESS_ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

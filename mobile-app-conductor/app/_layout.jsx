@@ -1,18 +1,15 @@
 import { useFonts } from "expo-font";
 import { Slot, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { View } from "react-native";
-import * as SecureStore from "expo-secure-store";
-import Constants from "expo-constants";
+import { AuthProvider, useAuth } from "../context/AuthContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-import { AuthProvider } from "../context/AuthContext";
-
 function InitialLayout() {
-  const [isSignedIn, setIsSignedIn] = useState(null);
+  const { user, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
@@ -29,29 +26,20 @@ function InitialLayout() {
   }, [fontsLoaded, error]);
 
   useEffect(() => {
-    const checkToken = async () => {
-      const token = await SecureStore.getItemAsync("userToken");
-      setIsSignedIn(!!token);
-    };
-
-    checkToken();
-  }, []);
-
-  useEffect(() => {
-    if (isSignedIn === null) {
+    if (loading) {
       return;
     }
 
     const inTabsGroup = segments[0] === "(tabs)";
 
-    if (isSignedIn && !inTabsGroup) {
+    if (user && !inTabsGroup) {
       router.replace("/home");
-    } else if (!isSignedIn) {
+    } else if (!user) {
       router.replace("/sign-in");
     }
-  }, [isSignedIn, segments, router]);
+  }, [user, loading, segments, router]);
 
-  if (!fontsLoaded || isSignedIn === null) {
+  if (!fontsLoaded || loading) {
     return <View />;
   }
 

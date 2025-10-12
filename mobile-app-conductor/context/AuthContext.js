@@ -1,26 +1,56 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import userApiClient from '../services/userApiClient';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // In a real app, you would fetch the user profile after login
-  // For now, we'll simulate a logged-in user.
   useEffect(() => {
-    // This is a mock user object. In a real app, you would get this
-    // from a secure storage after the user logs in.
-    setUser({
-      id: 'd8a4f5a0-8b13-4b01-9f33-3b48c9b7f260', // This is a sample UUID
-      username: 'conductor1',
-      firstName: 'John',
-      lastName: 'Doe',
-      role: 'CONDUCTOR',
-    });
+    const checkUser = async () => {
+      try {
+        const response = await userApiClient.get('/api/v1/users/me');
+        setUser(response.data);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUser();
   }, []);
 
+  const signIn = async (email, password) => {
+    try {
+      const response = await userApiClient.post('/api/v1/auth/login', {
+        email,
+        password,
+      }, {
+        headers: {
+          'X-Client-App': 'CONDUCTOR_MOBILE'
+        }
+      });
+      const user = response.data;
+      setUser(user);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await userApiClient.post('/api/v1/auth/logout');
+    } catch (error) {
+      console.error('Failed to logout on server', error);
+    }
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
