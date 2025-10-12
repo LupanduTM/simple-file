@@ -4,30 +4,15 @@ import { useRouter } from 'expo-router';
 import { COLORS } from '../../constants/colors';
 
 // Mock user data - replace with actual data from your auth context
-const user = {
-  name: 'John Doe',
-  email: 'john.doe@gocashless.com',
-  avatar: null, // or a URL to an image
-  memberSince: 'Sept 2025',
-  phone: '+260 97 123 4567',
-};
-
-const ProfileInfoRow = ({ icon, label, value }) => (
-  <View style={styles.infoRow}>
-    <Ionicons name={icon} size={24} color={COLORS.primary} />
-    <View style={styles.infoTextContainer}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
-    </View>
-  </View>
-);
+import { useAuth } from "../../context/AuthContext";
 
 export default function ProfileScreen() {
+  const { user, signOut } = useAuth();
   const router = useRouter();
 
   const onSignOut = () => {
-    // Handle sign out logic here
-    console.log('Signing out...');
+    signOut();
+    router.replace("/(auth)/sign-in");
   };
 
   const onEditProfile = () => {

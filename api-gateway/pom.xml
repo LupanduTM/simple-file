@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 
 	<groupId>com.gocashless</groupId>
@@ -24,18 +22,23 @@
 	</properties>
 
 	<dependencies>
-		<!-- ✅ Spring Cloud Gateway (WebFlux based) -->
+		<!-- ✅ New, non-deprecated starter -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-gateway</artifactId>
+			<artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
 		</dependency>
 
-		<!-- ✅ Eureka Client for Service Discovery -->
+		<!-- ✅ Eureka Client -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
+		<!-- ✅ Spring Security (reactive autoconfig will kick in) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 
 		<!-- ✅ Lombok -->
 		<dependency>
@@ -44,7 +47,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- ✅ Testing -->
+		<!-- ✅ Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -54,7 +57,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- Import Spring Cloud BOM to ensure dependency compatibility -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
@@ -73,5 +75,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

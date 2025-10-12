@@ -6,11 +6,10 @@ import { useCameraPermissions } from 'expo-camera';
 import * as Linking from 'expo-linking';
 import { COLORS } from '../../constants/colors';
 
-const user = {
-  name: 'John',
-};
+import { useAuth } from "../../context/AuthContext";
 
 export default function HomeScreen() {
+  const { user } = useAuth();
   const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
 

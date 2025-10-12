@@ -12,7 +12,7 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("user-management-service-auth", r -> r.path("/api/v1/auth/**")
-                        .uri("lb://USER-MANAGEMENT-SERVICE"))
+                        .uri("lb://user-management-service"))
                 .route("user-management-service", r -> r.path("/api/v1/users/**")
                         .uri("lb://user-management-service"))
                 .route("route-fare-management-service", r -> r.path("/api/v1/routes/**", "/api/v1/bus-stops/**", "/api/v1/fares/**")
