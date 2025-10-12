@@ -1,4 +1,4 @@
-package com.gocashless.fakepay;
+package com.gocashless.ths;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class FakePayApplication {
+public class TransactionHistoryServiceApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(FakePayApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(TransactionHistoryServiceApplication.class, args);
+	}
 
 }
