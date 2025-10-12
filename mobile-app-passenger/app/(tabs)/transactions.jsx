@@ -1,57 +1,27 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, FlatList, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-
-// Mock transaction data - replace with actual data from your API
-const mockTransactions = [
-  {
-    id: '1',
-    description: 'Bus Fare to City Market',
-    amount: -15.00,
-    date: '2025-09-02T10:30:00Z',
-    type: 'debit',
-  },
-  {
-    id: '2',
-    description: 'Bus Fare to Manda Hill',
-    amount: -12.50,
-    date: '2025-09-01T14:00:00Z',
-    type: 'debit',
-  },
-  {
-    id: '3',
-    description: 'Top-up from Airtel',
-    amount: 100.00,
-    date: '2025-08-31T09:00:00Z',
-    type: 'credit',
-  },
-  {
-    id: '4',
-    description: 'Bus Fare to UNZA',
-    amount: -10.00,
-    date: '2025-08-30T18:45:00Z',
-    type: 'debit',
-  },
-];
+import { useAuth } from '../../context/AuthContext';
+import { getPassengerTransactions } from '../../services/historyService';
 
 const TransactionItem = ({ item }) => {
-  const isDebit = item.type === 'debit';
-  const amountColor = isDebit ? COLORS.text : '#2E7D32'; // Using a green for credit
-  const iconName = isDebit ? 'arrow-down-outline' : 'arrow-up-outline';
+  // Assuming all transactions for a passenger are debits for now
+  const isDebit = true; 
+  const amountColor = COLORS.text;
 
   return (
     <View style={styles.itemContainer}>
-      <View style={[styles.iconContainer, { backgroundColor: isDebit ? '#FFEBEE' : '#E8F5E9' }]}>
-        <Ionicons name={isDebit ? 'bus-outline' : 'wallet-outline'} size={24} color={amountColor} />
+      <View style={[styles.iconContainer, { backgroundColor: '#FFEBEE' }]}>
+        <Ionicons name={'bus-outline'} size={24} color={amountColor} />
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.descriptionText}>{item.description}</Text>
-        <Text style={styles.dateText}>{new Date(item.date).toLocaleString()}</Text>
+        <Text style={styles.descriptionText}>{`Fare to ${item.destinationStopName}`}</Text>
+        <Text style={styles.dateText}>{new Date(item.transactionTime).toLocaleString()}</Text>
       </View>
       <View style={styles.amountContainer}>
         <Text style={[styles.amountText, { color: amountColor }]}>
-          {isDebit ? '-' : '+'} K{Math.abs(item.amount).toFixed(2)}
+          - K{Math.abs(item.amount).toFixed(2)}
         </Text>
       </View>
     </View>
@@ -67,12 +37,45 @@ const EmptyListComponent = () => (
 );
 
 export default function TransactionsScreen() {
+  const { user } = useAuth();
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchTransactions = async () => {
+        try {
+          setLoading(true);
+          const data = await getPassengerTransactions(user.id);
+          setTransactions(data);
+          setError(null);
+        } catch (e) {
+          setError('Failed to fetch transaction history.');
+          console.error(e);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchTransactions();
+    }
+  }, [user]);
+
+  if (loading) {
+    return <View style={styles.center}><ActivityIndicator size="large" color={COLORS.primary} /></View>;
+  }
+
+  if (error) {
+    return <View style={styles.center}><Text style={styles.errorText}>{error}</Text></View>;
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Text style={styles.headerTitle}>Transaction History</Text>
         <FlatList
-          data={mockTransactions}
+          data={transactions}
           renderItem={({ item }) => <TransactionItem item={item} />}
           keyExtractor={(item) => item.id}
           ListEmptyComponent={EmptyListComponent}
@@ -92,6 +95,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 28,
@@ -160,4 +168,8 @@ const styles = StyleSheet.create({
     color: COLORS.textLight,
     marginTop: 5,
   },
+  errorText: {
+      color: 'red',
+      fontSize: 16,
+  }
 });

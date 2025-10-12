@@ -70,6 +70,9 @@ public class QrCodeService {
         // 4. Construct the QR Payload (as a simple JSON object)
         ObjectNode qrPayload = objectMapper.createObjectNode();
         qrPayload.put("conductorId", request.getConductorId().toString());
+        qrPayload.put("routeId", request.getRouteId().toString());
+        qrPayload.put("originStopId", request.getOriginStopId().toString());
+        qrPayload.put("destinationStopId", request.getDestinationStopId().toString());
         qrPayload.put("fareAmount", fareAmount);
         qrPayload.put("currency", currency);
         qrPayload.put("transactionRef", transactionRef);

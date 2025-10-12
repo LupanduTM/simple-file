@@ -9,6 +9,8 @@ import Constants from "expo-constants";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+import { AuthProvider } from "../context/AuthContext";
+
 function InitialLayout() {
   const [isSignedIn, setIsSignedIn] = useState(null);
   const segments = useSegments();
@@ -57,5 +59,9 @@ function InitialLayout() {
 }
 
 export default function RootLayout() {
-  return <InitialLayout />;
+  return (
+    <AuthProvider>
+      <InitialLayout />
+    </AuthProvider>
+  );
 }
