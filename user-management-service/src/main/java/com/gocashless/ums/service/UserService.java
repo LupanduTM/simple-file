@@ -1,8 +1,7 @@
 package com.gocashless.ums.service;
 
-import com.gocashless.ums.config.RabbitMQConfig;
+import com.gocashless.ums.clients.NotificationServiceClient;
 import com.gocashless.ums.dto.ConductorNotification;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import com.gocashless.ums.dto.UserUpdateRequest;
 import com.gocashless.ums.model.User;
 import com.gocashless.ums.model.Role;
@@ -25,13 +24,13 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RabbitTemplate rabbitTemplate;
+    private final NotificationServiceClient notificationServiceClient;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RabbitTemplate rabbitTemplate) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, NotificationServiceClient notificationServiceClient) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.rabbitTemplate = rabbitTemplate;
+        this.notificationServiceClient = notificationServiceClient;
     }
 
     @Override
@@ -64,7 +63,7 @@ public class UserService implements UserDetailsService {
 
         if (role == Role.CONDUCTOR) {
             ConductorNotification notification = new ConductorNotification(savedUser.getEmail(), temporaryPassword);
-            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, "notification.email", notification);
+            notificationServiceClient.sendCredentials(notification);
         }
 
         return savedUser;

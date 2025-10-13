@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
+@EnableEurekaClient
+@EnableFeignClients
 
 public class UserManagementServiceApplication {
 
