@@ -5,6 +5,7 @@ export const homeStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    paddingTop: 40,
   },
   content: {
     padding: 20,
@@ -91,5 +92,21 @@ export const homeStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
+  },
+  input: {
+    borderRadius: 12,
+    padding: 18,
+    fontSize: 16,
+    color: COLORS.white,
+    backgroundColor: COLORS.primary,
+    width: '100%',
+    marginBottom: 15,
+    height: 55,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.white,
+    marginBottom: 10,
   },
 });

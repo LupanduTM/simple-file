@@ -7,18 +7,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const response = await userApiClient.get('/api/v1/users/me');
-        setUser(response.data);
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const checkUser = async () => {
+    try {
+      const response = await userApiClient.get('/api/v1/users/me');
+      setUser(response.data);
+    } catch (error) {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     checkUser();
   }, []);
 
@@ -32,9 +32,9 @@ export const AuthProvider = ({ children }) => {
           'X-Client-App': 'PASSENGER_MOBILE'
         }
       });
-      const user = response.data;
-      setUser(user);
-      return user;
+      // After successful login, refetch the user data to get all details
+      await checkUser(); 
+      return response.data;
     } catch (error) {
       throw error;
     }

@@ -12,12 +12,12 @@ const InitialLayout = () => {
   useEffect(() => {
     if (loading) return;
 
-    const inAuthGroup = segments[0] === "(auth)";
+    const inTabsGroup = segments[0] === "(tabs)";
 
-    if (user && inAuthGroup) {
+    if (user && !inTabsGroup) {
       router.replace("/(tabs)");
-    } else if (!user) {
-      router.replace("/(auth)/sign-in");
+    } else if (!user && inTabsGroup) {
+      router.replace("/sign-in");
     }
   }, [user, loading, segments, router]);
 
@@ -35,15 +35,17 @@ const InitialLayout = () => {
         headerTitleStyle: {
           fontWeight: "bold",
         },
+        headerShown: false,
       }}
     >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="sign-in" />
+      <Stack.Screen name="sign-up" />
       <Stack.Screen
         name="scanner"
         options={{
           presentation: "modal",
           title: "Scan to Pay",
-          headerShown: false,
         }}
       />
     </Stack>

@@ -70,6 +70,27 @@ public class UserService implements UserDetailsService {
         return savedUser;
     }
 
+    public User registerPassenger(UserRegistrationRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new IllegalArgumentException("Username already exists.");
+        }
+        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new IllegalArgumentException("Phone number already registered.");
+        }
+
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setRole(Role.PASSENGER);
+        user.setStatus(UserStatus.ACTIVE); // Default status
+
+        return userRepository.save(user);
+    }
+
     public Optional<User> findUserById(UUID id) {
         return userRepository.findById(id);
     }

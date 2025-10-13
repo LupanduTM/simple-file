@@ -5,6 +5,7 @@ export const homeStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    paddingTop: 40,
   },
   content: {
     padding: 20,
@@ -61,5 +62,39 @@ export const homeStyles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 22,
     fontWeight: "bold",
+  },
+  input: {
+    borderRadius: 12,
+    padding: 18,
+    fontSize: 16,
+    color: COLORS.text,
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.border,
+    borderWidth: 1,
+    width: '100%',
+    marginBottom: 15,
+    height: 55,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 10,
+  },
+  generateButton: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 12,
+    padding: 18,
+    marginTop: 30,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  generateButtonText: {
+    color: COLORS.white,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 10,
   },
 });

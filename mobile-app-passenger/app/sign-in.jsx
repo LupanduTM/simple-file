@@ -10,9 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { homeStyles } from "../../assets/styles/home.styles";
-import { COLORS } from "../../constants/colors";
-import { useAuth } from "../../context/AuthContext";
+import { homeStyles } from "../assets/styles/home.styles";
+import { COLORS } from "../constants/colors";
+import { useAuth } from "../context/AuthContext";
 
 const SignInScreen = () => {
   const { signIn } = useAuth();
@@ -52,26 +52,24 @@ const SignInScreen = () => {
         <View style={homeStyles.card}>
           <Text style={homeStyles.cardTitle}>Sign In</Text>
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>Email</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
+          <Text style={homeStyles.label}>Email</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor={COLORS.textLight}
+          />
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>Password</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-          </View>
+          <Text style={homeStyles.label}>Password</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            placeholderTextColor={COLORS.textLight}
+          />
 
           <TouchableOpacity
             style={homeStyles.generateButton}

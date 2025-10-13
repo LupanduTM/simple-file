@@ -51,7 +51,7 @@ public class UserController {
     @PostMapping("/register/passenger")
     public ResponseEntity<?> registerPassenger(@RequestBody UserRegistrationRequest request) {
         try {
-            User newUser = userService.registerUser(request, Role.PASSENGER);
+            User newUser = userService.registerPassenger(request);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -9,10 +9,11 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
-import { homeStyles } from "../../assets/styles/home.styles";
-import { COLORS } from "../../constants/colors";
-import userApiClient from "../../services/userApiClient";
+import { homeStyles } from "../assets/styles/home.styles";
+import { COLORS } from "../constants/colors";
+import userApiClient from "../services/userApiClient";
 
 const SignUpScreen = () => {
   const router = useRouter();
@@ -40,7 +41,7 @@ const SignUpScreen = () => {
         firstName,
         lastName,
       });
-      router.replace("/sign-in");
+      router.replace("/(tabs)");
     } catch (error) {
       Alert.alert(
         "Registration Failed",
@@ -53,7 +54,7 @@ const SignUpScreen = () => {
 
   return (
     <SafeAreaView style={homeStyles.container}>
-      <View style={homeStyles.content}>
+      <ScrollView contentContainerStyle={homeStyles.content}>
         <View style={homeStyles.header}>
           <Text style={homeStyles.title}>Create Account,</Text>
           <Text style={homeStyles.subtitle}>Sign up to get started.</Text>
@@ -62,64 +63,58 @@ const SignUpScreen = () => {
         <View style={homeStyles.card}>
           <Text style={homeStyles.cardTitle}>Sign Up</Text>
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>First Name</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={firstName}
-              onChangeText={setFirstName}
-            />
-          </View>
+          <Text style={homeStyles.label}>First Name</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={firstName}
+            onChangeText={setFirstName}
+            placeholderTextColor={COLORS.textLight}
+          />
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>Last Name</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={lastName}
-              onChangeText={setLastName}
-            />
-          </View>
+          <Text style={homeStyles.label}>Last Name</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={lastName}
+            onChangeText={setLastName}
+            placeholderTextColor={COLORS.textLight}
+          />
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>Username</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-            />
-          </View>
+          <Text style={homeStyles.label}>Username</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={username}
+            onChangeText={setUsername}
+            autoCapitalize="none"
+            placeholderTextColor={COLORS.textLight}
+          />
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>Email</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
+          <Text style={homeStyles.label}>Email</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor={COLORS.textLight}
+          />
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>Phone Number</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-            />
-          </View>
+          <Text style={homeStyles.label}>Phone Number</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            keyboardType="phone-pad"
+            placeholderTextColor={COLORS.textLight}
+          />
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={homeStyles.label}>Password</Text>
-            <TextInput
-              style={homeStyles.input}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-          </View>
+          <Text style={homeStyles.label}>Password</Text>
+          <TextInput
+            style={homeStyles.input}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            placeholderTextColor={COLORS.textLight}
+          />
 
           <TouchableOpacity
             style={homeStyles.generateButton}
@@ -142,7 +137,7 @@ const SignUpScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

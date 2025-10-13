@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useCameraPermissions } from 'expo-camera';
@@ -9,7 +9,7 @@ import { COLORS } from '../../constants/colors';
 import { useAuth } from "../../context/AuthContext";
 
 export default function HomeScreen() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -43,11 +43,21 @@ export default function HomeScreen() {
     }
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Welcome Back, {user.name}!</Text>
+          <Text style={styles.headerText}>Welcome Back, {user ? `${user.firstName} ${user.lastName}` : ''}!</Text>
           <Text style={styles.subHeaderText}>Ready to pay for your trip?</Text>
         </View>
 

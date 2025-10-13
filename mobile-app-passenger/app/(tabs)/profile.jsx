@@ -1,25 +1,55 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { COLORS } from '../../constants/colors';
-
-// Mock user data - replace with actual data from your auth context
 import { useAuth } from "../../context/AuthContext";
 
+const ProfileInfoRow = ({ icon, label, value }) => (
+  <View style={styles.infoRow}>
+    <Ionicons name={icon} size={24} color={COLORS.primary} />
+    <View style={styles.infoTextContainer}>
+      <Text style={styles.infoLabel}>{label}</Text>
+      <Text style={styles.infoValue}>{value}</Text>
+    </View>
+  </View>
+);
+
 export default function ProfileScreen() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const router = useRouter();
 
   const onSignOut = () => {
     signOut();
-    router.replace("/(auth)/sign-in");
+    router.replace("/sign-in");
   };
 
   const onEditProfile = () => {
-    // For now, this just logs to the console. Later, it can navigate.
-    // router.push('/profile/edit');
     console.log('Navigate to Edit Profile');
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!user) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <Text style={styles.errorText}>Failed to load profile.</Text>
+          <TouchableOpacity style={styles.signOutButton} onPress={onSignOut}>
+            <Ionicons name="log-out-outline" size={24} color={COLORS.primary} />
+            <Text style={styles.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -28,7 +58,7 @@ export default function ProfileScreen() {
           <View style={styles.avatarContainer}>
             <Ionicons name="person-outline" size={60} color={COLORS.white} />
           </View>
-          <Text style={styles.userName}>{user.name}</Text>
+          <Text style={styles.userName}>{`${user.firstName} ${user.lastName}`}</Text>
           <Text style={styles.userEmail}>{user.email}</Text>
           <TouchableOpacity style={styles.editButton} onPress={onEditProfile}>
             <Ionicons name="pencil-outline" size={24} color={COLORS.white} />
@@ -36,10 +66,9 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.infoCard}>
-          <ProfileInfoRow icon="person-circle-outline" label="Full Name" value={user.name} />
+          <ProfileInfoRow icon="person-circle-outline" label="Full Name" value={`${user.firstName} ${user.lastName}`} />
           <ProfileInfoRow icon="mail-outline" label="Email Address" value={user.email} />
-          <ProfileInfoRow icon="call-outline" label="Phone Number" value={user.phone} />
-          <ProfileInfoRow icon="time-outline" label="Member Since" value={user.memberSince} />
+          <ProfileInfoRow icon="call-outline" label="Phone Number" value={user.phoneNumber} />
         </View>
 
         <TouchableOpacity style={styles.signOutButton} onPress={onSignOut}>
