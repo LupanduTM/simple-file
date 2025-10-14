@@ -129,7 +129,7 @@ const ConductorsPage = () => {
       setIsResetModalOpen(false);
       setSelectedConductor(null);
       // Optionally, show a success message
-      alert("Password has been reset to 'gocashless'.");
+      alert("Password has been reset. An email has been sent to the conductor with the new credentials.");
     } catch (err) {
       setError(err.message);
     }
@@ -239,7 +239,7 @@ const ConductorsPage = () => {
       <Modal isOpen={isResetModalOpen} onClose={() => setIsResetModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">Reset Password</h2>
         <p>Are you sure you want to reset the password for <strong>{selectedConductor?.firstName} {selectedConductor?.lastName}</strong>?</p>
-        <p className="text-sm text-gray-600 mt-2">The password will be reset to the default: <strong>gocashless</strong>.</p>
+        <p className="text-sm text-gray-600 mt-2">A new, randomly generated password will be sent to the conductor's email address.</p>
         <div className="flex justify-end mt-6">
           <button onClick={() => setIsResetModalOpen(false)} className="mr-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
             Cancel

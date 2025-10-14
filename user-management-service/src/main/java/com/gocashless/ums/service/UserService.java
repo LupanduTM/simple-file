@@ -139,8 +139,12 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        user.setPasswordHash(passwordEncoder.encode("gocashless"));
+        String temporaryPassword = UUID.randomUUID().toString().substring(0, 8);
+        user.setPasswordHash(passwordEncoder.encode(temporaryPassword));
         userRepository.save(user);
+
+        ConductorNotification notification = new ConductorNotification(user.getEmail(), temporaryPassword);
+        notificationServiceClient.sendCredentials(notification);
     }
 
     public java.util.List<User> getAllConductors() {
