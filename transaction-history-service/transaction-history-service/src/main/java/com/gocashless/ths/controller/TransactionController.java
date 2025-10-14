@@ -2,6 +2,7 @@ package com.gocashless.ths.controller;
 
 import com.gocashless.ths.dto.TransactionResponse;
 import com.gocashless.ths.model.Transaction;
+import com.gocashless.ths.service.DashboardService;
 import com.gocashless.ths.service.TransactionService;
 import com.gocashless.ths.dto.TransactionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +12,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
+@CrossOrigin(origins = "*") // Allow all origins for now
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final DashboardService dashboardService;
 
     @Autowired
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService, DashboardService dashboardService) {
         this.transactionService = transactionService;
+        this.dashboardService = dashboardService;
     }
 
     @PostMapping
@@ -61,5 +66,29 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-    // Add endpoints for updating transaction status, etc., as needed
+    // Dashboard Endpoints
+    @GetMapping("/stats/kpis")
+    public ResponseEntity<Map<String, Object>> getKpis() {
+        return new ResponseEntity<>(dashboardService.getKpis(), HttpStatus.OK);
+    }
+
+    @GetMapping("/stats/over-time")
+    public ResponseEntity<List<Map<String, Object>>> getTransactionsOverTime() {
+        return new ResponseEntity<>(dashboardService.getTransactionsOverTime(), HttpStatus.OK);
+    }
+
+    @GetMapping("/stats/by-status")
+    public ResponseEntity<List<Map<String, Object>>> getTransactionsByStatus() {
+        return new ResponseEntity<>(dashboardService.getTransactionsByStatus(), HttpStatus.OK);
+    }
+
+    @GetMapping("/stats/by-type")
+    public ResponseEntity<List<Map<String, Object>>> getTransactionsByType() {
+        return new ResponseEntity<>(dashboardService.getTransactionsByType(), HttpStatus.OK);
+    }
+
+    @GetMapping("/stats/top-routes")
+    public ResponseEntity<List<Map<String, Object>>> getTopRoutes() {
+        return new ResponseEntity<>(dashboardService.getTopRoutes(), HttpStatus.OK);
+    }
 }

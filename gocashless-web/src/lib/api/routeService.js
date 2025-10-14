@@ -17,4 +17,8 @@ export const routeService = {
   deleteRoute: (id) => {
     return routeApiClient.delete(`/api/v1/routes/${id}`).then(res => res.data);
   },
+
+  getRouteById: (id) => {
+    return routeApiClient.get(`/api/v1/routes/${id}`).then(res => res.data);
+  },
 };
