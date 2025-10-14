@@ -2,18 +2,12 @@
 import axios from 'axios';
 
 const userApiClient = axios.create({
-  baseURL: 'http://localhost:7000',
+  baseURL: 'http://localhost:8765',
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
-userApiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwt_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 export default userApiClient;

@@ -24,8 +24,8 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const response = await authService.login(formData);
-      login(response.token);
+      await authService.login(formData);
+      login();
       router.push('/dashboard');
     } catch (err) {
       setError('Login failed. Please check your credentials.');
@@ -60,14 +60,14 @@ const LoginPage = () => {
       <div className="w-full md:w-1/2 flex items-center justify-center bg-stone-100 p-6 md:p-12">
         <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg space-y-6">
           <div>
-            <h2 className="text-3xl font-bold text-dark-text">Welcome Back 👋</h2>
+            <h2 className="text-3xl font-bold text-dark-text">Welcome Back</h2>
             <p className="text-black">Please log in to your account.</p>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-1 text-dark-text">Email or Phone</label>
+              <label htmlFor="email" className="block text-sm font-medium mb-1 text-dark-text">Email</label>
               <Input id="email" name="email" type="email" placeholder="you@example.com" required value={formData.email} onChange={handleChange} />
             </div>
             <div>

@@ -18,7 +18,6 @@ import java.util.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -41,7 +40,7 @@ public class UserController {
     @PostMapping("/register/admin")
     public ResponseEntity<?> registerAdmin(@RequestBody UserRegistrationRequest request) {
         try {
-            User newUser = userService.registerUser(request, Role.GOCASHLESS_ADMIN);
+            User newUser = userService.registerAdmin(request);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

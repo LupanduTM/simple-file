@@ -9,6 +9,13 @@ spring:
     gateway:
       forwarded:
         enabled: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
 
 eureka:
   client:
