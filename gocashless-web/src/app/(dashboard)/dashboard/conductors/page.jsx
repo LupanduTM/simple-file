@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Edit, Trash, Search, Key } from "lucide-react";
+import { Plus, Edit, Trash, Search, Key, DollarSign } from "lucide-react";
+import Link from 'next/link';
 import { conductorService } from "@/lib/api/conductorService";
 import Modal from "@/components/Modal";
-import DashboardLayout from "@/components/layout/DashboardLayout";
+import DashboardLayout from "../../../../components/layout/DashboardLayout";
 
 const ConductorCard = ({ conductor, onEdit, onDelete, onResetPassword }) => {
   return (
@@ -14,6 +15,9 @@ const ConductorCard = ({ conductor, onEdit, onDelete, onResetPassword }) => {
         <p className="text-gray-600">{conductor.phoneNumber}</p>
       </div>
       <div className="flex justify-end items-center mt-4">
+        <Link href={`/dashboard/conductors/${conductor.id}/transactions`} className="text-blue-500 hover:text-blue-700 mr-4">
+          <DollarSign size={20} />
+        </Link>
         <button onClick={() => onResetPassword(conductor)} className="text-yellow-500 hover:text-yellow-700 mr-4">
           <Key size={20} />
         </button>

@@ -29,6 +29,12 @@ public class TransactionController {
         this.dashboardService = dashboardService;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<TransactionResponse>> getAllTransactions() {
+        List<TransactionResponse> transactions = transactionService.getAllTransactions();
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionRequest request) {
         try {

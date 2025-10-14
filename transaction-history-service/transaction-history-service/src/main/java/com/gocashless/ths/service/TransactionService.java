@@ -72,12 +72,50 @@ public class TransactionService {
         return transactionRepository.findByTransactionTimeBetweenOrderByTransactionTimeDesc(startDate, endDate);
     }
 
+    public List<TransactionResponse> getAllTransactions() {
+        return transactionRepository.findAll()
+                .stream()
+                .map(this::toTransactionResponse)
+                .collect(Collectors.toList());
+    }
+
     private TransactionResponse toTransactionResponse(Transaction transaction) {
-        UserResponse user = umsServiceClient.getUserById(transaction.getUserId());
-        UserResponse conductor = transaction.getConductorId() != null ? umsServiceClient.getUserById(transaction.getConductorId()) : null;
-        RouteResponse route = rfmsServiceClient.getRouteById(transaction.getRouteId());
-        BusStopResponse originStop = rfmsServiceClient.getBusStopById(transaction.getOriginStopId());
-        BusStopResponse destinationStop = rfmsServiceClient.getBusStopById(transaction.getDestinationStopId());
+        UserResponse user = null;
+        try {
+            user = umsServiceClient.getUserById(transaction.getUserId());
+        } catch (Exception e) {
+            // Log the error
+        }
+
+        UserResponse conductor = null;
+        if (transaction.getConductorId() != null) {
+            try {
+                conductor = umsServiceClient.getUserById(transaction.getConductorId());
+            } catch (Exception e) {
+                // Log the error
+            }
+        }
+
+        RouteResponse route = null;
+        try {
+            route = rfmsServiceClient.getRouteById(transaction.getRouteId());
+        } catch (Exception e) {
+            // Log the error
+        }
+
+        BusStopResponse originStop = null;
+        try {
+            originStop = rfmsServiceClient.getBusStopById(transaction.getOriginStopId());
+        } catch (Exception e) {
+            // Log the error
+        }
+
+        BusStopResponse destinationStop = null;
+        try {
+            destinationStop = rfmsServiceClient.getBusStopById(transaction.getDestinationStopId());
+        } catch (Exception e) {
+            // Log the error
+        }
 
         TransactionResponse response = new TransactionResponse();
         response.setId(transaction.getId());
