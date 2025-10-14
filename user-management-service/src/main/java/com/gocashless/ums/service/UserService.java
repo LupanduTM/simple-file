@@ -2,6 +2,8 @@ package com.gocashless.ums.service;
 
 import com.gocashless.ums.clients.NotificationServiceClient;
 import com.gocashless.ums.dto.ConductorNotification;
+import com.gocashless.ums.dto.PassengerNotification;
+import com.gocashless.ums.dto.PasswordResetNotification;
 import com.gocashless.ums.dto.UserUpdateRequest;
 import com.gocashless.ums.model.User;
 import com.gocashless.ums.model.Role;
@@ -14,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -87,7 +91,17 @@ public class UserService implements UserDetailsService {
         user.setRole(Role.PASSENGER);
         user.setStatus(UserStatus.ACTIVE); // Default status
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        PassengerNotification notification = new PassengerNotification(
+                savedUser.getFirstName(),
+                savedUser.getLastName(),
+                savedUser.getEmail(),
+                LocalDate.now()
+        );
+        notificationServiceClient.sendPassengerWelcomeEmail(notification);
+
+        return savedUser;
     }
 
     public User registerAdmin(UserRegistrationRequest request) {
@@ -143,8 +157,8 @@ public class UserService implements UserDetailsService {
         user.setPasswordHash(passwordEncoder.encode(temporaryPassword));
         userRepository.save(user);
 
-        ConductorNotification notification = new ConductorNotification(user.getEmail(), temporaryPassword);
-        notificationServiceClient.sendCredentials(notification);
+        PasswordResetNotification notification = new PasswordResetNotification(user.getEmail(), temporaryPassword);
+        notificationServiceClient.sendPasswordReset(notification);
     }
 
     public java.util.List<User> getAllConductors() {
