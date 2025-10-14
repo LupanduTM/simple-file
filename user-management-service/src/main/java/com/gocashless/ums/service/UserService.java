@@ -165,4 +165,11 @@ public class UserService implements UserDetailsService {
         user.setStatus(status);
         return userRepository.save(user);
     }
+
+    public void deleteUser(UUID id) {
+        if (!userRepository.existsById(id)) {
+            throw new NoSuchElementException("User not found");
+        }
+        userRepository.deleteById(id);
+    }
 }

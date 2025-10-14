@@ -107,14 +107,13 @@ const ConductorsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    // Note: Backend does not support deleting users yet.
-    if (window.confirm("Are you sure you want to delete this conductor? This action is not yet supported by the backend.")) {
-      // try {
-      //   await conductorService.deleteConductor(id);
-      //   setConductors(conductors.filter(c => c.id !== id));
-      // } catch (err) {
-      //   setError(err.message);
-      // }
+    if (window.confirm("Are you sure you want to delete this conductor?")) {
+      try {
+        await conductorService.deleteConductor(id);
+        setConductors(conductors.filter(c => c.id !== id));
+      } catch (err) {
+        setError(err.message);
+      }
     }
   };
 

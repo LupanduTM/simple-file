@@ -21,4 +21,8 @@ export const conductorService = {
   getConductorById: (id) => {
     return userApiClient.get(`/api/v1/users/${id}`).then(res => res.data);
   },
+
+  deleteConductor: (id) => {
+    return userApiClient.delete(`/api/v1/users/${id}`).then(res => res.data);
+  },
 };

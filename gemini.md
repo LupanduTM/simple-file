@@ -81,6 +81,7 @@ The backend consists of several independent microservices:
     - Fixing a JSON serialization error in the backend controller.
     - Implementing robust frontend validation to prevent invalid route ordering.
   - Added full CRUD endpoints for Fares to the `route-fare-management-service` backend.
+  - The user will be responsible for running the microservices.
 
 This file serves as a living document of our collaboration. I will refer to it to maintain context in our future sessions.
 

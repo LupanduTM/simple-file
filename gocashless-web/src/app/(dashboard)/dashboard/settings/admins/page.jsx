@@ -1,12 +1,12 @@
 
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Edit, Search } from "lucide-react";
+import { Plus, Edit, Search, Key } from "lucide-react";
 import { adminService } from "@/lib/api/adminService";
 import Modal from "@/components/Modal";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
-const AdminRow = ({ admin, onStatusChange }) => {
+const AdminRow = ({ admin, onStatusChange, onResetPassword }) => {
   return (
     <tr className="border-b hover:bg-gray-50">
       <td className="py-3 px-4">{admin.firstName} {admin.lastName}</td>
@@ -21,6 +21,9 @@ const AdminRow = ({ admin, onStatusChange }) => {
         <button onClick={() => onStatusChange(admin)} className="text-blue-500 hover:text-blue-700">
           <Edit size={20} />
         </button>
+        <button onClick={() => onResetPassword(admin)} className="text-yellow-500 hover:text-yellow-700 ml-2">
+          <Key size={20} />
+        </button>
       </td>
     </tr>
   );
@@ -32,6 +35,7 @@ const AdminsPage = () => {
   const [error, setError] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [addFormData, setAddFormData] = useState({ username: "", password: "", email: "", phoneNumber: "", firstName: "", lastName: "" });
   const [statusFormData, setStatusFormData] = useState({ status: '' });
@@ -88,6 +92,22 @@ const AdminsPage = () => {
     }
   };
 
+  const openResetModal = (admin) => {
+    setSelectedAdmin(admin);
+    setIsResetModalOpen(true);
+  };
+
+  const handleResetPasswordConfirm = async () => {
+    try {
+      await adminService.resetPassword(selectedAdmin.id);
+      setIsResetModalOpen(false);
+      setSelectedAdmin(null);
+      alert("Password has been reset. An email has been sent to the admin with the new credentials.");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const filteredAdmins = admins.filter(a =>
     (a.firstName + ' ' + a.lastName).toLowerCase().includes(searchTerm.toLowerCase()) ||
     a.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -136,7 +156,7 @@ const AdminsPage = () => {
           </thead>
           <tbody>
             {filteredAdmins.map((admin) => (
-              <AdminRow key={admin.id} admin={admin} onStatusChange={openStatusModal} />
+              <AdminRow key={admin.id} admin={admin} onStatusChange={openStatusModal} onResetPassword={openResetModal} />
             ))}
           </tbody>
         </table>
@@ -190,6 +210,20 @@ const AdminsPage = () => {
             <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update Status</button>
           </div>
         </form>
+      </Modal>
+
+      <Modal isOpen={isResetModalOpen} onClose={() => setIsResetModalOpen(false)}>
+        <h2 className="text-xl font-bold mb-4">Reset Password</h2>
+        <p>Are you sure you want to reset the password for <strong>{selectedAdmin?.firstName} {selectedAdmin?.lastName}</strong>?</p>
+        <p className="text-sm text-gray-600 mt-2">A new, randomly generated password will be sent to the admin's email address.</p>
+        <div className="flex justify-end mt-6">
+          <button onClick={() => setIsResetModalOpen(false)} className="mr-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
+            Cancel
+          </button>
+          <button onClick={handleResetPasswordConfirm} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            Confirm & Reset
+          </button>
+        </div>
       </Modal>
 
     </DashboardLayout>

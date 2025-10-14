@@ -13,4 +13,8 @@ export const adminService = {
   updateAdminStatus: (id, status) => {
     return userApiClient.put(`/api/v1/users/${id}/status`, { status }).then(res => res.data);
   },
+
+  resetPassword: (id) => {
+    return userApiClient.post(`/api/v1/users/${id}/reset-password`).then(res => res.data);
+  },
 };
