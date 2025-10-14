@@ -42,4 +42,8 @@ public class DashboardService {
     public List<Map<String, Object>> getTopRoutes() {
         return transactionRepository.getTopRoutes();
     }
+
+    public List<Map<String, Object>> getTopConductors() {
+        return transactionRepository.getTopConductors();
+    }
 }

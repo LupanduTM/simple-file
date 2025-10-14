@@ -7,6 +7,7 @@ import TransactionsOverTimeChart from "@/components/dashboard/TransactionsOverTi
 import TransactionsByStatusChart from "@/components/dashboard/TransactionsByStatusChart";
 import TransactionsByTypeChart from "@/components/dashboard/TransactionsByTypeChart";
 import TopRoutes from "@/components/dashboard/TopRoutes";
+import TopConductors from "@/components/dashboard/TopConductors";
 import { dashboardService } from "@/lib/api/dashboardService";
 
 const DashboardPage = () => {
@@ -30,6 +31,7 @@ const DashboardPage = () => {
             <TransactionsByTypeChart />
         </div>
         <TopRoutes />
+        <TopConductors />
       </div>
     </DashboardLayout>
   );

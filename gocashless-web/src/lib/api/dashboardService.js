@@ -20,4 +20,8 @@ export const dashboardService = {
   getTopRoutes: () => {
     return thsApiClient.get('/api/v1/transactions/stats/top-routes').then(res => res.data);
   },
+
+  getTopConductors: () => {
+    return thsApiClient.get('/api/v1/transactions/stats/top-conductors').then(res => res.data);
+  },
 };

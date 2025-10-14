@@ -91,4 +91,9 @@ public class TransactionController {
     public ResponseEntity<List<Map<String, Object>>> getTopRoutes() {
         return new ResponseEntity<>(dashboardService.getTopRoutes(), HttpStatus.OK);
     }
+
+    @GetMapping("/stats/top-conductors")
+    public ResponseEntity<List<Map<String, Object>>> getTopConductors() {
+        return new ResponseEntity<>(dashboardService.getTopConductors(), HttpStatus.OK);
+    }
 }

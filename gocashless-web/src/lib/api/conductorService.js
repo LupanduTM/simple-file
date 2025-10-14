@@ -17,4 +17,8 @@ export const conductorService = {
   resetPassword: (id) => {
     return userApiClient.post(`/api/v1/users/${id}/reset-password`).then(res => res.data);
   },
+
+  getConductorById: (id) => {
+    return userApiClient.get(`/api/v1/users/${id}`).then(res => res.data);
+  },
 };

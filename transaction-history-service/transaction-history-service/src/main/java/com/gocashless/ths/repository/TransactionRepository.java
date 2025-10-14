@@ -37,4 +37,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     @Query("SELECT new map(t.routeId as routeId, sum(t.amount) as totalAmount) FROM Transaction t WHERE t.status = 'COMPLETED' GROUP BY t.routeId ORDER BY totalAmount DESC")
     List<Map<String, Object>> getTopRoutes();
+
+    @Query("SELECT new map(t.conductorId as conductorId, sum(t.amount) as totalAmount) FROM Transaction t WHERE t.status = 'COMPLETED' GROUP BY t.conductorId ORDER BY totalAmount DESC")
+    List<Map<String, Object>> getTopConductors();
 }
