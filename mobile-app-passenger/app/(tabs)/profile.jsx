@@ -1,183 +1,121 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import { useAuth } from "../../context/AuthContext";
 
-const ProfileInfoRow = ({ icon, label, value }) => (
-  <View style={styles.infoRow}>
+// Mock user data
+const user = {
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  phone: '+260 97 123 4567',
+};
+
+const ProfileItem = ({ icon, label, value }) => (
+  <View style={styles.itemContainer}>
     <Ionicons name={icon} size={24} color={COLORS.primary} />
-    <View style={styles.infoTextContainer}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
+    <View style={styles.itemTextContainer}>
+      <Text style={styles.itemLabel}>{label}</Text>
+      <Text style={styles.itemValue}>{value}</Text>
     </View>
   </View>
 );
 
 export default function ProfileScreen() {
-  const { user, signOut, loading } = useAuth();
   const router = useRouter();
 
-  const onSignOut = () => {
-    signOut();
-    router.replace("/sign-in");
+  const handleSignOut = () => {
+    // In a real app, you'd clear auth tokens and navigate to the sign-in screen
+    router.replace('/sign-in');
   };
-
-  const onEditProfile = () => {
-    console.log('Navigate to Edit Profile');
-  };
-
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (!user) {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          <Text style={styles.errorText}>Failed to load profile.</Text>
-          <TouchableOpacity style={styles.signOutButton} onPress={onSignOut}>
-            <Ionicons name="log-out-outline" size={24} color={COLORS.primary} />
-            <Text style={styles.signOutText}>Sign Out</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    );
-  }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.avatarContainer}>
-            <Ionicons name="person-outline" size={60} color={COLORS.white} />
-          </View>
-          <Text style={styles.userName}>{`${user.firstName} ${user.lastName}`}</Text>
-          <Text style={styles.userEmail}>{user.email}</Text>
-          <TouchableOpacity style={styles.editButton} onPress={onEditProfile}>
-            <Ionicons name="pencil-outline" size={24} color={COLORS.white} />
-          </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>My Profile</Text>
+      </View>
+      <View style={styles.content}>
+        <View style={styles.avatarContainer}>
+          <Ionicons name="person-circle" size={120} color={COLORS.gray} />
+          <Text style={styles.userName}>{user.name}</Text>
         </View>
 
-        <View style={styles.infoCard}>
-          <ProfileInfoRow icon="person-circle-outline" label="Full Name" value={`${user.firstName} ${user.lastName}`} />
-          <ProfileInfoRow icon="mail-outline" label="Email Address" value={user.email} />
-          <ProfileInfoRow icon="call-outline" label="Phone Number" value={user.phoneNumber} />
-        </View>
+        <ProfileItem icon="mail" label="Email" value={user.email} />
+        <ProfileItem icon="call" label="Phone" value={user.phone} />
 
-        <TouchableOpacity style={styles.signOutButton} onPress={onSignOut}>
-          <Ionicons name="log-out-outline" size={24} color={COLORS.primary} />
-          <Text style={styles.signOutText}>Sign Out</Text>
+        <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+          <Ionicons name="log-out-outline" size={24} color="#ff4757" />
+          <Text style={styles.signOutButtonText}>Sign Out</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  container: {
-    padding: 20,
-    alignItems: 'center',
-  },
   header: {
-    width: '100%',
-    alignItems: 'center',
-    backgroundColor: COLORS.primary,
-    paddingVertical: 30,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    marginBottom: 20,
-    position: 'relative',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
-  avatarContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-    borderWidth: 2,
-    borderColor: COLORS.white,
-  },
-  userName: {
+  headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: COLORS.white,
+    color: COLORS.primary,
+    textAlign: 'center',
   },
-  userEmail: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.8)',
+  content: {
+    flex: 1,
+    padding: 20,
   },
-  editButton: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0,0,0,0.1)',
+  avatarContainer: {
+    alignItems: 'center',
+    marginBottom: 40,
   },
-  infoCard: {
-    width: '100%',
-    backgroundColor: COLORS.card,
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 20,
-    shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  userName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginTop: 10,
   },
-  infoRow: {
+  itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
   },
-  infoRowLast: {
-    borderBottomWidth: 0,
-  },
-  infoTextContainer: {
+  itemTextContainer: {
     marginLeft: 15,
   },
-  infoLabel: {
+  itemLabel: {
     fontSize: 14,
-    color: COLORS.textLight,
+    color: COLORS.gray,
   },
-  infoValue: {
+  itemValue: {
     fontSize: 16,
     color: COLORS.text,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   signOutButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.card,
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 30,
-    shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    justifyContent: 'center',
+    backgroundColor: '#ff47571a',
+    borderRadius: 10,
+    padding: 15,
+    marginTop: 30,
   },
-  signOutText: {
-    marginLeft: 10,
+  signOutButtonText: {
+    color: '#ff4757',
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.primary,
+    marginLeft: 10,
   },
 });

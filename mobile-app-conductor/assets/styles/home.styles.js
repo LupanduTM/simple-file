@@ -97,8 +97,10 @@ export const homeStyles = StyleSheet.create({
     borderRadius: 12,
     padding: 18,
     fontSize: 16,
-    color: COLORS.white,
-    backgroundColor: COLORS.primary,
+    color: COLORS.text,
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.border,
+    borderWidth: 1,
     width: '100%',
     marginBottom: 15,
     height: 55,
@@ -106,7 +108,7 @@ export const homeStyles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.white,
+    color: COLORS.text,
     marginBottom: 10,
   },
 });

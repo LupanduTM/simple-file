@@ -1,140 +1,82 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useCameraPermissions } from 'expo-camera';
-import * as Linking from 'expo-linking';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 
-import { useAuth } from "../../context/AuthContext";
-
 export default function HomeScreen() {
-  const { user, loading } = useAuth();
   const router = useRouter();
-  const [permission, requestPermission] = useCameraPermissions();
-
-  const handleScanPress = async () => {
-    if (!permission) {
-      // Permissions are still loading
-      return;
-    }
-
-    // Check current status
-    if (permission.granted) {
-      router.push('/scanner');
-      return;
-    }
-
-    // If not granted, request permission
-    const { status } = await requestPermission();
-
-    if (status === 'granted') {
-      router.push('/scanner');
-    } else {
-      // Handle the case where permission is denied
-      Alert.alert(
-        'Permission Required',
-        'Camera access is required to scan QR codes. Please grant permission in your phone settings.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Open Settings', onPress: () => Linking.openSettings() },
-        ]
-      );
-    }
-  };
-
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      </SafeAreaView>
-    );
-  }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Welcome Back, {user ? `${user.firstName} ${user.lastName}` : ''}!</Text>
-          <Text style={styles.subHeaderText}>Ready to pay for your trip?</Text>
-        </View>
-
-        <View style={styles.scanCard}>
-          <Text style={styles.cardTitle}>Scan & Pay</Text>
-          <Text style={styles.cardInstructions}>
-            Tap the button below to open the scanner. Point it at a conductor's QR code to complete your payment.
-          </Text>
-          <TouchableOpacity style={styles.scanButton} onPress={handleScanPress}>
-            <Ionicons name="qr-code-outline" size={80} color={COLORS.primary} />
-          </TouchableOpacity>
-        </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>GoCashless</Text>
+      </View>
+      <View style={styles.content}>
+        <Text style={styles.promptText}>Ready to ride?</Text>
+        <Text style={styles.subText}>Tap below to scan a QR code and pay for your bus fare instantly.</Text>
+        <TouchableOpacity style={styles.scanButton} onPress={() => router.push('/scanner')}>
+          <Ionicons name="qr-code" size={40} color="white" />
+          <Text style={styles.scanButtonText}>Scan & Pay</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  container: {
+  header: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: COLORS.primary,
+    textAlign: 'center',
+  },
+  content: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
-  header: {
-    position: 'absolute',
-    top: 80,
-    left: 20,
-    right: 20,
-    alignItems: 'center',
-  },
-  headerText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    textAlign: 'center',
-  },
-  subHeaderText: {
-    fontSize: 16,
-    color: COLORS.textLight,
-    textAlign: 'center',
-    marginTop: 4,
-  },
-  scanCard: {
-    backgroundColor: COLORS.card,
-    borderRadius: 30,
-    padding: 30,
-    alignItems: 'center',
-    shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  cardTitle: {
+  promptText: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: COLORS.text,
     marginBottom: 10,
   },
-  cardInstructions: {
+  subText: {
     fontSize: 16,
-    color: COLORS.textLight,
+    color: COLORS.gray,
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: 40,
+    maxWidth: '80%',
   },
   scanButton: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: COLORS.background,
-    justifyContent: 'center',
+    backgroundColor: COLORS.primary,
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderRadius: 100,
+    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 4,
-    borderColor: COLORS.border,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  scanButtonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 15,
   },
 });

@@ -9,18 +9,15 @@ export default function ScannerScreen() {
   const router = useRouter();
 
   const handleCodeScanned = (scannedData) => {
-    router.back();
-    Alert.alert(
-      'QR Code Scanned!',
-      `Data: ${scannedData}`,
-      [
-        {
-          text: 'OK',
-          onPress: () => console.log('Payment flow would start here.'),
-        },
-      ],
-      { cancelable: false }
-    );
+    if (scannedData) {
+      // Navigate to the confirmation screen with the scanned data
+      router.push({
+        pathname: '/confirmPayment',
+        params: { scannedData },
+      });
+    } else {
+      Alert.alert('Scan Failed', 'Could not read QR code. Please try again.');
+    }
   };
 
   return (
