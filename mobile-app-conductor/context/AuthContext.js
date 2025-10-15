@@ -33,8 +33,7 @@ export const AuthProvider = ({ children }) => {
           'X-Client-App': 'CONDUCTOR_MOBILE'
         }
       });
-      // After successful login, refetch the user data to get all details
-      await checkUser(); 
+      setUser(response.data.user); 
       return response.data;
     } catch (error) {
       throw error;
