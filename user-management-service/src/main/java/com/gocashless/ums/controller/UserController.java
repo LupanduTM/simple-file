@@ -37,6 +37,32 @@ public class UserController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PutMapping("/me")
+    public ResponseEntity<?> updateMyProfile(@RequestBody UserUpdateRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        try {
+            User updatedUser = userService.updateUserByEmail(email, request);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<?> deleteMyProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        try {
+            userService.deleteUserByEmail(email);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/register/admin")
     public ResponseEntity<?> registerAdmin(@RequestBody UserRegistrationRequest request) {
         try {

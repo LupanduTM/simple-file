@@ -1,44 +1,97 @@
 
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView, StatusBar } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, SafeAreaView, StatusBar, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
+import { useAuth } from '../../context/AuthContext';
+import { getTransactionHistory } from '../../services/transactionService';
 
-// Mock data for transaction history
-const mockHistory = [
-  { id: '1', date: '2025-10-15', route: 'City Market -> Intercity', amount: '15.00', status: 'Completed' },
-  { id: '2', date: '2025-10-14', route: 'UNZA -> Arcades', amount: '12.50', status: 'Completed' },
-  { id: '3', date: '2025-10-13', route: 'Northmead -> Manda Hill', amount: '10.00', status: 'Completed' },
-  { id: '4', date: '2025-10-12', route: 'Intercity -> Chelston', amount: '18.00', status: 'Failed' },
-  { id: '5', date: '2025-10-11', route: 'Civic Centre -> East Park', amount: '11.00', status: 'Completed' },
-];
+const TransactionItem = ({ item }) => {
+  const formattedDate = new Date(item.transactionTime).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
-const TransactionItem = ({ item }) => (
-  <View style={styles.itemContainer}>
-    <View style={styles.itemHeader}>
-      <Text style={styles.itemDate}>{item.date}</Text>
-      <Text style={[styles.itemStatus, item.status === 'Failed' && styles.itemStatusFailed]}>
-        {item.status}
-      </Text>
+  return (
+    <View style={styles.itemContainer}>
+      <View style={styles.itemHeader}>
+        <Text style={styles.itemDate}>{formattedDate}</Text>
+        <Text style={[styles.itemStatus, item.status !== 'SUCCESS' && styles.itemStatusFailed]}>
+          {item.status}
+        </Text>
+      </View>
+      <Text style={styles.itemRoute}>{`${item.originStopName} -> ${item.destinationStopName}`}</Text>
+      <Text style={styles.itemAmount}>K{item.amount.toFixed(2)}</Text>
     </View>
-    <Text style={styles.itemRoute}>{item.route}</Text>
-    <Text style={styles.itemAmount}>K{item.amount}</Text>
-  </View>
-);
+  );
+};
 
 export default function HistoryScreen() {
+  const { user } = useAuth();
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchHistory = async () => {
+    if (!user?.id) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getTransactionHistory(user.id);
+      setTransactions(data);
+    } catch (e) {
+      setError('Failed to fetch transaction history. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchHistory();
+    }, [user])
+  );
+
+  const renderContent = () => {
+    if (loading) {
+      return <ActivityIndicator size="large" color={COLORS.primary} style={styles.centered} />;
+    }
+
+    if (error) {
+      return (
+        <View style={styles.centered}>
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={fetchHistory}>
+            <Text style={styles.retryButtonText}>Try Again</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        data={transactions}
+        renderItem={({ item }) => <TransactionItem item={item} />}
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={styles.listContainer}
+        ListEmptyComponent={<Text style={styles.emptyText}>No transactions yet.</Text>}
+        onRefresh={fetchHistory}
+        refreshing={loading}
+      />
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Transaction History</Text>
       </View>
-      <FlatList
-        data={mockHistory}
-        renderItem={({ item }) => <TransactionItem item={item} />}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={<Text style={styles.emptyText}>No transactions yet.</Text>}
-      />
+      {renderContent()}
     </SafeAreaView>
   );
 }
@@ -49,7 +102,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    padding: 20,
+    paddingTop: 40,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
@@ -61,6 +116,28 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 20,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: COLORS.danger,
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   itemContainer: {
     backgroundColor: 'white',

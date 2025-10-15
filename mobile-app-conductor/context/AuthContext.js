@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
         password,
       }, {
         headers: {
+          'Content-Type': 'application/json',
           'X-Client-App': 'CONDUCTOR_MOBILE'
         }
       });

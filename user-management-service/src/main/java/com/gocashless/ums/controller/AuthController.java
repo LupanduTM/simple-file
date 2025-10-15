@@ -41,20 +41,22 @@ public class AuthController {
         String clientApp = request.getHeader("X-Client-App");
         User user = (User) userDetails;
 
-        boolean roleMismatch = switch (clientApp) {
-            case "PASSENGER_MOBILE" -> user.getRole() != Role.PASSENGER;
-            case "CONDUCTOR_MOBILE" -> user.getRole() != Role.CONDUCTOR;
-            case "ADMIN_WEB_DASHBOARD" -> user.getRole() != Role.GOCASHLESS_ADMIN;
-            default -> true;
-        };
+        if (clientApp != null) {
+            boolean roleMismatch = switch (clientApp) {
+                case "PASSENGER_MOBILE" -> user.getRole() != Role.PASSENGER;
+                case "CONDUCTOR_MOBILE" -> user.getRole() != Role.CONDUCTOR;
+                case "ADMIN_WEB_DASHBOARD" -> user.getRole() != Role.GOCASHLESS_ADMIN;
+                default -> false; // Allow other clients for now
+            };
 
-        if (roleMismatch) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            if (roleMismatch) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         }
 
         HttpSession session = request.getSession(true);
         session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
-        return ResponseEntity.ok(Map.of("message", "Login successful", "role", user.getRole().toString()));
+        return ResponseEntity.ok(Map.of("message", "Login successful", "user", user));
     }
 }

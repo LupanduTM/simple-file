@@ -1,15 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-
-// Mock user data
-const user = {
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  phone: '+260 97 123 4567',
-};
+import { useAuth } from '../../context/AuthContext';
 
 const ProfileItem = ({ icon, label, value }) => (
   <View style={styles.itemContainer}>
@@ -23,11 +17,54 @@ const ProfileItem = ({ icon, label, value }) => (
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { user, loading, signOut } = useAuth();
 
-  const handleSignOut = () => {
-    // In a real app, you'd clear auth tokens and navigate to the sign-in screen
+  const handleSignOut = async () => {
+    await signOut();
     router.replace('/sign-in');
   };
+
+  const handleEditProfile = () => {
+    // Navigate to an edit profile screen (to be created)
+    router.push('/profile/edit-profile');
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to delete your account? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: async () => {
+          try {
+            await deleteUser();
+            router.replace('/sign-in');
+          } catch (error) {
+            Alert.alert("Error", "Failed to delete account. Please try again later.");
+          }
+        }}
+      ]
+    );
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, styles.centered]}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </SafeAreaView>
+    );
+  }
+
+  if (!user) {
+    return (
+      <SafeAreaView style={[styles.container, styles.centered]}>
+        <Text>Could not load profile.</Text>
+        <TouchableOpacity onPress={() => router.replace('/sign-in')}>
+          <Text>Go to Sign In</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,11 +75,21 @@ export default function ProfileScreen() {
       <View style={styles.content}>
         <View style={styles.avatarContainer}>
           <Ionicons name="person-circle" size={120} color={COLORS.gray} />
-          <Text style={styles.userName}>{user.name}</Text>
+          <Text style={styles.userName}>{`${user.firstName} ${user.lastName}`}</Text>
         </View>
 
         <ProfileItem icon="mail" label="Email" value={user.email} />
-        <ProfileItem icon="call" label="Phone" value={user.phone} />
+        <ProfileItem icon="call" label="Phone" value={user.phoneNumber} />
+
+        <TouchableOpacity style={styles.actionButton} onPress={handleEditProfile}>
+          <Ionicons name="pencil" size={24} color={COLORS.primary} />
+          <Text style={styles.actionButtonText}>Edit Profile</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.actionButton, styles.deleteButton]} onPress={handleDeleteAccount}>
+          <Ionicons name="trash-outline" size={24} color={COLORS.danger} />
+          <Text style={[styles.actionButtonText, styles.deleteButtonText]}>Delete Account</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
           <Ionicons name="log-out-outline" size={24} color="#ff4757" />
@@ -58,8 +105,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   header: {
-    padding: 20,
+    paddingTop: 40,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
@@ -102,6 +155,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.text,
     fontWeight: '600',
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+  },
+  actionButtonText: {
+    fontSize: 16,
+    color: COLORS.text,
+    fontWeight: '600',
+    marginLeft: 15,
+  },
+  deleteButton: {
+    backgroundColor: 'white',
+  },
+  deleteButtonText: {
+    color: COLORS.danger,
   },
   signOutButton: {
     flexDirection: 'row',

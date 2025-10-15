@@ -32,8 +32,7 @@ export const AuthProvider = ({ children }) => {
           'X-Client-App': 'PASSENGER_MOBILE'
         }
       });
-      // After successful login, refetch the user data to get all details
-      await checkUser(); 
+      setUser(response.data.user);
       return response.data;
     } catch (error) {
       throw error;
@@ -49,8 +48,29 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const deleteUser = async () => {
+    try {
+      await userApiClient.delete('/api/v1/users/me');
+      setUser(null);
+    } catch (error) {
+      console.error('Failed to delete account', error);
+      throw error;
+    }
+  };
+
+  const updateUser = async (userData) => {
+    try {
+      const response = await userApiClient.put('/api/v1/users/me', userData);
+      setUser(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to update profile', error);
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut, deleteUser, setUser, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

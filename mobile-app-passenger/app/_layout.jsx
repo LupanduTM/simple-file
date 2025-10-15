@@ -12,11 +12,13 @@ const InitialLayout = () => {
   useEffect(() => {
     if (loading) return;
 
-    const inTabsGroup = segments[0] === "(tabs)";
+    const isPublicRoute = segments[0] === 'sign-in' || segments[0] === 'sign-up';
 
-    if (user && !inTabsGroup) {
+    if (user && isPublicRoute) {
+      // User is logged in but on a public route, redirect to home.
       router.replace("/(tabs)");
-    } else if (!user && inTabsGroup) {
+    } else if (!user && !isPublicRoute) {
+      // User is not logged in and on a protected route, redirect to sign-in.
       router.replace("/sign-in");
     }
   }, [user, loading, segments, router]);
