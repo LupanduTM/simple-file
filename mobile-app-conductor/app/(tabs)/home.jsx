@@ -14,16 +14,16 @@ import { homeStyles } from "../../assets/styles/home.styles";
 import QrCodeModal from "../../components/QrCodeModal";
 import SelectionModal from "../../components/SelectionModal";
 import { COLORS } from "../../constants/colors";
+import { useAuth } from "../../context/AuthContext";
 import qrApiClient from "../../services/qrApiClient";
 import routeApiClient from "../../services/routeApiClient";
-import userApiClient from "../../services/userApiClient";
 
 const HomeScreen = () => {
-  
+  const { user } = useAuth();
+
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [selectedRoute, setSelectedRoute] = useState(null);
-  const [conductorProfile, setConductorProfile] = useState(null);
 
   const [stops, setStops] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -42,14 +42,12 @@ const HomeScreen = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [stopsResponse, routesResponse, profileResponse] = await Promise.all([
+        const [stopsResponse, routesResponse] = await Promise.all([
           routeApiClient.get("/api/v1/bus-stops"),
           routeApiClient.get("/api/v1/routes"),
-          userApiClient.get("/api/v1/users/me"),
         ]);
         setStops(stopsResponse.data);
         setRoutes(routesResponse.data);
-        setConductorProfile(profileResponse.data);
         setError(null);
       } catch (err) {
         setError("Failed to fetch data. Please try again later.");
@@ -98,16 +96,22 @@ const HomeScreen = () => {
 
   const handleGenerateQR = async () => {
     if (!selectedRoute || !origin || !destination) {
-      Alert.alert("Missing Information", "Please select a route, origin, and destination.");
+      Alert.alert(
+        "Missing Information",
+        "Please select a route, origin, and destination."
+      );
       return;
     }
-    if (!conductorProfile) {
-      Alert.alert("Error", "Could not verify conductor profile. Please restart the app.");
+    if (!user) {
+      Alert.alert(
+        "Error",
+        "Could not verify conductor profile. Please restart the app."
+      );
       return;
     }
 
     const qrRequest = {
-      conductorId: conductorProfile.id,
+      conductorId: user.id,
       routeId: selectedRoute.id,
       originStopId: origin.id,
       destinationStopId: destination.id,
@@ -119,7 +123,10 @@ const HomeScreen = () => {
       const response = await qrApiClient.post("/api/v1/qr/generate", qrRequest);
       setQrCodeImage(response.data.qrCodeImageBase64);
     } catch (err) {
-      Alert.alert("QR Generation Failed", err.response?.data || "An unexpected error occurred.");
+      Alert.alert(
+        "QR Generation Failed",
+        err.response?.data || "An unexpected error occurred."
+      );
       setQrModalVisible(false);
       console.error(err);
     } finally {
@@ -132,7 +139,9 @@ const HomeScreen = () => {
       <ScrollView contentContainerStyle={homeStyles.content}>
         {/* Header */}
         <View style={homeStyles.header}>
-          <Text style={homeStyles.title}>Welcome, {conductorProfile?.firstName || ""}</Text>
+          <Text style={homeStyles.title}>
+            Welcome, {user?.firstName || ""} {user?.lastName || ""}
+          </Text>
           <Text style={homeStyles.subtitle}>
             Generate a QR code for a new trip.
           </Text>
