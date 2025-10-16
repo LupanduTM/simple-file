@@ -1,5 +1,5 @@
 
-const API_BASE_URL = 'http://192.168.1.10:8080/api/v1'; // Replace with your actual local IP
+const API_BASE_URL = 'http://10.159.183.13:8083/api/v1'; // Replace with your actual local IP
 
 export const initiatePayment = async (paymentRequest) => {
   try {

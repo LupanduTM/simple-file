@@ -48,10 +48,11 @@ public class EncryptionService {
      */
     public String encryptPayload(Object payload) throws Exception {
         String jsonPayload = objectMapper.writeValueAsString(payload);
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding"); // ECB is simple, consider CBC/GCM with IV for production
-        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey());
-        byte[] encryptedBytes = cipher.doFinal(jsonPayload.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(encryptedBytes);
+//        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding"); // ECB is simple, consider CBC/GCM with IV for production
+//        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey());
+//        byte[] encryptedBytes = cipher.doFinal(jsonPayload.getBytes(StandardCharsets.UTF_8));
+//        return Base64.getEncoder().encodeToString(encryptedBytes);
+        return jsonPayload;
     }
 
     /**
@@ -63,10 +64,12 @@ public class EncryptionService {
      * @throws Exception If decryption fails.
      */
     public <T> T decryptPayload(String encryptedPayload, Class<T> valueType) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, getSecretKey());
-        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPayload));
-        String jsonPayload = new String(decryptedBytes, StandardCharsets.UTF_8);
-        return objectMapper.readValue(jsonPayload, valueType);
+//        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+//        cipher.init(Cipher.DECRYPT_MODE, getSecretKey());
+//        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPayload));
+//        String jsonPayload = new String(decryptedBytes, StandardCharsets.UTF_8);
+//        return objectMapper.readValue(jsonPayload, valueType);
+        return null;
     }
 }
+

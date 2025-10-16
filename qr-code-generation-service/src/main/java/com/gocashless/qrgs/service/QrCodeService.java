@@ -64,15 +64,44 @@ public class QrCodeService {
         // --- END OF REAL SCENARIO ---
 
 
+        // 2a. Query User Management Service to get conductor details
+        String umsUrl = "http://USER-MANAGEMENT-SERVICE/api/v1/users/" + request.getConductorId().toString();
+        logger.info("Calling UMS for conductor details: {}", umsUrl);
+        JsonNode userResponse = restTemplate.getForObject(umsUrl, JsonNode.class);
+
+        if (userResponse == null) {
+            logger.error("Conductor not found with ID: {}", request.getConductorId());
+            throw new IllegalArgumentException("Conductor details could not be retrieved.");
+        }
+        String conductorName = userResponse.get("firstName").asText() + " " + userResponse.get("lastName").asText();
+        String phoneNumber = userResponse.get("phoneNumber").asText();
+
+        // 2b. Query RFMS to get stop names
+        String originStopUrl = "http://ROUTE-FARE-MANAGEMENT-SERVICE/api/v1/bus-stops/" + request.getOriginStopId().toString();
+        String destinationStopUrl = "http://ROUTE-FARE-MANAGEMENT-SERVICE/api/v1/bus-stops/" + request.getDestinationStopId().toString();
+
+        logger.info("Calling RFMS for origin stop details: {}", originStopUrl);
+        JsonNode originStopResponse = restTemplate.getForObject(originStopUrl, JsonNode.class);
+        String originStopName = (originStopResponse != null) ? originStopResponse.get("name").asText() : "N/A";
+
+        logger.info("Calling RFMS for destination stop details: {}", destinationStopUrl);
+        JsonNode destinationStopResponse = restTemplate.getForObject(destinationStopUrl, JsonNode.class);
+        String destinationStopName = (destinationStopResponse != null) ? destinationStopResponse.get("name").asText() : "N/A";
+
+
         // 3. Generate a unique transaction reference
         String transactionRef = UUID.randomUUID().toString();
 
         // 4. Construct the QR Payload (as a simple JSON object)
         ObjectNode qrPayload = objectMapper.createObjectNode();
         qrPayload.put("conductorId", request.getConductorId().toString());
+        qrPayload.put("conductorName", conductorName);
+        qrPayload.put("phoneNumber", phoneNumber);
         qrPayload.put("routeId", request.getRouteId().toString());
         qrPayload.put("originStopId", request.getOriginStopId().toString());
+        qrPayload.put("originStopName", originStopName);
         qrPayload.put("destinationStopId", request.getDestinationStopId().toString());
+        qrPayload.put("destinationStopName", destinationStopName);
         qrPayload.put("fareAmount", fareAmount);
         qrPayload.put("currency", currency);
         qrPayload.put("transactionRef", transactionRef);

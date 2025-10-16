@@ -38,9 +38,9 @@ export default function ConfirmPaymentScreen() {
       userId: MOCK_USER_ID,
       conductorId: paymentData.conductorId,
       routeId: paymentData.routeId,
-      originStopId: paymentData.startStopId,
-      destinationStopId: paymentData.endStopId,
-      amount: paymentData.fare,
+      originStopId: paymentData.originStopId,
+      destinationStopId: paymentData.destinationStopId,
+      amount: paymentData.fareAmount,
       currency: 'ZMW',
       paymentMethod: 'MOBILE_MONEY',
     };
@@ -109,22 +109,22 @@ export default function ConfirmPaymentScreen() {
 
           <View style={styles.paymentDetails}>
             <Text style={styles.paymentQuestion}>
-              Do you agree to make a payment of{' '}
-              <Text style={styles.amount}>K{paymentData.fare.toFixed(2)}</Text>?
+              Do you agree to make transfer{' '}
+              <Text style={styles.amount}>K{paymentData.fareAmount.toFixed(2)}</Text> to <Text style={styles.phoneNumber}>{paymentData.phoneNumber}</Text>?
             </Text>
 
             <View style={styles.tripInfo}>
               <View style={styles.tripDetail}>
                 <Text style={styles.tripLabel}>From</Text>
-                <Text style={styles.tripValue}>{paymentData.startStopName || 'N/A'}</Text>
+                <Text style={styles.tripValue}>{paymentData.originStopName || 'N/A'}</Text>
               </View>
               <View style={styles.tripDetail}>
                 <Text style={styles.tripLabel}>To</Text>
-                <Text style={styles.tripValue}>{paymentData.endStopName || 'N/A'}</Text>
+                <Text style={styles.tripValue}>{paymentData.destinationStopName || 'N/A'}</Text>
               </View>
               <View style={styles.tripDetail}>
                 <Text style={styles.tripLabel}>Fare</Text>
-                <Text style={styles.tripValue}>K{paymentData.fare.toFixed(2)}</Text>
+                <Text style={styles.tripValue}>K{paymentData.fareAmount.toFixed(2)}</Text>
               </View>
             </View>
           </View>
