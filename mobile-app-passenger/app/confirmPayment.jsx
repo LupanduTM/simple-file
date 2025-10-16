@@ -4,12 +4,12 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
+import { useAuth } from '../context/AuthContext';
 import { initiatePayment } from '../services/paymentService';
 
-// Mock current user ID - in a real app, this would come from your auth context
-const MOCK_USER_ID = 'd8f8b8a0-8b8b-4b8b-8b8b-8b8b8b8b8b8b'; // Replace with a valid UUID
-
 export default function ConfirmPaymentScreen() {
+  const { user } = useAuth();
+  console.log(user);
   const router = useRouter();
   const params = useLocalSearchParams();
   const [paymentData, setPaymentData] = useState(null);
@@ -35,7 +35,7 @@ export default function ConfirmPaymentScreen() {
     setError(null);
 
     const paymentRequest = {
-      userId: MOCK_USER_ID,
+      userId: user.id,
       conductorId: paymentData.conductorId,
       routeId: paymentData.routeId,
       originStopId: paymentData.originStopId,

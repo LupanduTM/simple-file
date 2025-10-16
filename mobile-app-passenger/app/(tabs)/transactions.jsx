@@ -73,7 +73,9 @@ export default function TransactionsScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+      <View style={styles.header}>
         <Text style={styles.headerTitle}>Transaction History</Text>
+      </View>
         <FlatList
           data={transactions}
           renderItem={({ item }) => <TransactionItem item={item} />}
@@ -101,11 +103,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  header: {
+    paddingTop: 40,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: COLORS.text,
-    marginBottom: 20,
+    color: COLORS.primary,
+    textAlign: 'center',
   },
   listContentContainer: {
     paddingBottom: 20,
