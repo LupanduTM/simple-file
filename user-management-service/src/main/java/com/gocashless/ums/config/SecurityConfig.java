@@ -35,7 +35,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for API endpoints
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/login", "/api/v1/users/register/passenger", "/api/v1/users/{id}").permitAll()
-                        .requestMatchers("/api/v1/users/admins", "/api/v1/users/conductors", "/api/v1/users/passengers", "/api/v1/users/register/admin", "/api/v1/users/{id}/status", "/api/v1/users/me").hasRole(Role.GOCASHLESS_ADMIN.name())
+                        .requestMatchers("/api/v1/users/admins", "/api/v1/users/conductors", "/api/v1/users/passengers", "/api/v1/users/register/admin", "/api/v1/users/{id}/status").hasRole(Role.GOCASHLESS_ADMIN.name())
+                        .requestMatchers("/api/v1/users/me").authenticated()
                         .requestMatchers("/api/passenger/**").hasRole(Role.PASSENGER.name())
                         .requestMatchers("/api/conductor/**").hasRole(Role.CONDUCTOR.name())
                         .requestMatchers("/api/admin/**").hasRole(Role.GOCASHLESS_ADMIN.name())
