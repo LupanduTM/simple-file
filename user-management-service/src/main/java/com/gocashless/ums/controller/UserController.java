@@ -1,5 +1,6 @@
 package com.gocashless.ums.controller;
 
+import com.gocashless.ums.dto.UpdatePasswordRequest;
 import com.gocashless.ums.dto.UserRegistrationRequest;
 import com.gocashless.ums.dto.UserStatusUpdateRequest;
 import com.gocashless.ums.dto.UserUpdateRequest;
@@ -165,6 +166,16 @@ public class UserController {
         try {
             userService.deleteUser(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<?> updatePassword(@PathVariable UUID id, @RequestBody UpdatePasswordRequest request) {
+        try {
+            userService.updatePassword(id, request);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }

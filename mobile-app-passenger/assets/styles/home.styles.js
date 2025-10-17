@@ -9,7 +9,8 @@ export const homeStyles = StyleSheet.create({
   },
   content: {
     padding: 20,
-    alignItems: "center",
+    flexGrow: 1,
+    justifyContent: "center",
   },
   header: {
     width: "100%",

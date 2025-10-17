@@ -7,4 +7,11 @@ const userApiClient = axios.create({
   withCredentials: true,
 });
 
+export const updatePassword = async (userId, newPassword) => {
+  const response = await userApiClient.put(`/api/v1/users/${userId}/password`, {
+    newPassword,
+  });
+  return response.data;
+};
+
 export default userApiClient;

@@ -4,6 +4,7 @@ import com.gocashless.ums.clients.NotificationServiceClient;
 import com.gocashless.ums.dto.ConductorNotification;
 import com.gocashless.ums.dto.PassengerNotification;
 import com.gocashless.ums.dto.PasswordResetNotification;
+import com.gocashless.ums.dto.UpdatePasswordRequest;
 import com.gocashless.ums.dto.UserUpdateRequest;
 import com.gocashless.ums.model.User;
 import com.gocashless.ums.model.Role;
@@ -202,5 +203,13 @@ public class UserService implements UserDetailsService {
             throw new NoSuchElementException("User not found");
         }
         userRepository.deleteById(id);
+    }
+
+    public void updatePassword(UUID id, UpdatePasswordRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

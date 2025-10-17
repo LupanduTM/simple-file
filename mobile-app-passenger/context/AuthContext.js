@@ -60,7 +60,8 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = async (userData) => {
     try {
-      const response = await userApiClient.put('/api/v1/users/me', userData);
+      console.log('Calling updateUser with URL:', userApiClient.getUri() + '/api/v1/users/update/' + user.id);
+      const response = await userApiClient.put(`/api/v1/users/update/${user.id}`, userData);
       setUser(response.data);
       return response.data;
     } catch (error) {

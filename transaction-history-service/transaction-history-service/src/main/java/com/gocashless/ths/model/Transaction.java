@@ -19,9 +19,9 @@ public class Transaction {
     private UUID id;
 
     @Column(nullable = false)
-    private UUID userId; // ID of the passenger or conductor involved
+    private UUID userId; // ID of the passenger
 
-    private UUID conductorId; // ID of the conductor for fare payments (optional)
+    private UUID conductorId; // ID of the conductor for fare payments
 
     @Column(nullable = false)
     private UUID routeId; // ID of the route for fare payments (from RFMS)
@@ -40,14 +40,14 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TransactionType transactionType; // e.g., FARE_PAYMENT, TOP_UP, WITHDRAWAL
+    private TransactionType transactionType; // e.g., FARE_PAYMENT
 
     @Column(nullable = false)
-    private String paymentMethod; // e.g., MOBILE_MONEY, CARD, CASH
+    private String paymentMethod; // e.g., MOBILE_MONEY, BANK
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TransactionStatus status; // e.g., COMPLETED, PENDING, FAILED
+    private TransactionStatus status; // e.g. COMPLETED, PENDING, FAILED
 
     @Column(nullable = false)
     private LocalDateTime transactionTime;

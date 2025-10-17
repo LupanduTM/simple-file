@@ -28,7 +28,7 @@ public class EmailService {
         message.setFrom("noreply@gocashless.com");
         message.setTo(notification.getEmail());
         message.setSubject("Welcome to GoCashless — Your Passenger Account Is Ready");
-        message.setText("Dear " + notification.getFirstName() + " " + notification.getLastName() + ",\n\nWe are pleased to confirm that your GoCashless passenger account has been successfully created.\n\nAccount details•Registered email: " + notification.getEmail() + "•Account status: Active•Registration date: " + notification.getRegistrationDate() + "\n\nYou can now sign in to the GoCashless app to:•View routes and fares,•Top up and pay for rides securely, and•Review your recent trips and transactions.\n\nIf you did not create this account, please contact our support team immediately.\n\nKind regards,\nGoCashless SupportEmail: support@gocashless.com | Phone: +260 763 576 462");
+        message.setText("Dear " + notification.getFirstName() + " " + notification.getLastName() + ",\n\nWe are pleased to confirm that your GoCashless passenger account has been successfully created.\n\nAccount details•Registered email: " + notification.getEmail() + "•Account status: Active•Registration date: " + notification.getRegistrationDate() + "\n\nYou can now sign in to the GoCashless app to: Pay for rides securely, and review your recent transactions.\n\nIf you did not create this account, please contact our support team immediately.\n\nKind regards,\nGoCashless SupportEmail: support@gocashless.com | Phone: +260 763 576 462");
         mailSender.send(message);
     }
 

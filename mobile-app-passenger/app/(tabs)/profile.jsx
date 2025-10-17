@@ -1,9 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, TouchableOpacity, ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { useAuth } from '../../context/AuthContext';
+import ChangePasswordModal from '../../components/ChangePasswordModal';
+import { updatePassword } from '../../services/userApiClient';
 
 const ProfileItem = ({ icon, label, value }) => (
   <View style={styles.itemContainer}>
@@ -18,6 +20,7 @@ const ProfileItem = ({ icon, label, value }) => (
 export default function ProfileScreen() {
   const router = useRouter();
   const { user, loading, signOut } = useAuth();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -47,6 +50,16 @@ export default function ProfileScreen() {
     );
   };
 
+  const handleChangePassword = async (newPassword) => {
+    try {
+      await updatePassword(user.id, newPassword);
+      setModalVisible(false);
+      Alert.alert("Success", "Password updated successfully.");
+    } catch (error) {
+      Alert.alert("Error", "Failed to update password. Please try again.");
+    }
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={[styles.container, styles.centered]}>
@@ -72,7 +85,7 @@ export default function ProfileScreen() {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>My Profile</Text>
       </View>
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.avatarContainer}>
           <Ionicons name="person-circle" size={120} color={COLORS.gray} />
           <Text style={styles.userName}>{`${user.firstName} ${user.lastName}`}</Text>
@@ -86,6 +99,11 @@ export default function ProfileScreen() {
           <Text style={styles.actionButtonText}>Edit Profile</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.actionButton} onPress={() => setModalVisible(true)}>
+          <Ionicons name="lock-closed-outline" size={24} color={COLORS.primary} />
+          <Text style={styles.actionButtonText}>Change Password</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={[styles.actionButton, styles.deleteButton]} onPress={handleDeleteAccount}>
           <Ionicons name="trash-outline" size={24} color={COLORS.danger} />
           <Text style={[styles.actionButtonText, styles.deleteButtonText]}>Delete Account</Text>
@@ -95,7 +113,12 @@ export default function ProfileScreen() {
           <Ionicons name="log-out-outline" size={24} color="#ff4757" />
           <Text style={styles.signOutButtonText}>Sign Out</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
+      <ChangePasswordModal
+        visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        onSubmit={handleChangePassword}
+      />
     </SafeAreaView>
   );
 }

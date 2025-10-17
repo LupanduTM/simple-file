@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
@@ -7,15 +7,21 @@ import { useAuth } from '../../context/AuthContext';
 
 export default function EditProfileScreen() {
   const router = useRouter();
-  const { user, setUser } = useAuth();
+  const { user, setUser, updateUser } = useAuth();
   const [firstName, setFirstName] = useState(user?.firstName || '');
   const [lastName, setLastName] = useState(user?.lastName || '');
   const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || '');
+  const [phoneNumberError, setPhoneNumberError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSaveChanges = async () => {
+    if (phoneNumber.length !== 10) {
+      setPhoneNumberError("Phone number must be 10 digits.");
+      return;
+    }
     setLoading(true);
     try {
+      console.log('Updating user with:', { firstName, lastName, phoneNumber });
       const updatedUser = await updateUser({ firstName, lastName, phoneNumber });
       setUser(updatedUser);
       router.back();
@@ -23,6 +29,15 @@ export default function EditProfileScreen() {
       console.error("Failed to update profile", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePhoneNumberChange = (text) => {
+    setPhoneNumber(text);
+    if (text.length !== 10) {
+      setPhoneNumberError("Phone number must be 10 digits.");
+    } else {
+      setPhoneNumberError("");
     }
   };
 
@@ -59,10 +74,12 @@ export default function EditProfileScreen() {
           <TextInput
             style={styles.input}
             value={phoneNumber}
-            onChangeText={setPhoneNumber}
+            onChangeText={handlePhoneNumberChange}
             placeholder="Enter your phone number"
             keyboardType="phone-pad"
+            maxLength={10}
           />
+          {phoneNumberError ? <Text style={styles.errorText}>{phoneNumberError}</Text> : null}
         </View>
         <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges} disabled={loading}>
           {loading ? (
@@ -127,5 +144,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 5,
   },
 });

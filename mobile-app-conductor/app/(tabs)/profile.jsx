@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -8,18 +8,32 @@ import {
   View,
   ActivityIndicator,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { homeStyles } from "../../assets/styles/home.styles";
 import { COLORS } from "../../constants/colors";
 import { useAuth } from "../../context/AuthContext";
+import ChangePasswordModal from "../../components/ChangePasswordModal";
+import { updatePassword } from "../../services/userApiClient";
 
 const ProfileScreen = () => {
   const { user, signOut, loading } = useAuth();
   const router = useRouter();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
     router.replace("/sign-in");
+  };
+
+  const handleChangePassword = async (newPassword) => {
+    try {
+      await updatePassword(user.id, newPassword);
+      setModalVisible(false);
+      Alert.alert("Success", "Password updated successfully.");
+    } catch (error) {
+      Alert.alert("Error", "Failed to update password. Please try again.");
+    }
   };
 
   return (
@@ -60,6 +74,13 @@ const ProfileScreen = () => {
           )}
           <TouchableOpacity
             style={[homeStyles.generateButton, {marginTop: 20}]}
+            onPress={() => setModalVisible(true)}
+          >
+            <Ionicons name="lock-closed-outline" size={24} color={COLORS.white} />
+            <Text style={homeStyles.generateButtonText}>Change Password</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={homeStyles.signOutButton}
             onPress={handleSignOut}
           >
             <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
@@ -67,6 +88,11 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <ChangePasswordModal
+        visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        onSubmit={handleChangePassword}
+      />
     </SafeAreaView>
   );
 };

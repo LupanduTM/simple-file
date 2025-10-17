@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { homeStyles } from "../assets/styles/home.styles";
 import { COLORS } from "../constants/colors";
@@ -28,6 +30,11 @@ const SignUpScreen = () => {
   const handleSignUp = async () => {
     if (!email || !password || !username || !phoneNumber || !firstName || !lastName) {
       Alert.alert("Missing Information", "Please fill out all fields.");
+      return;
+    }
+
+    if (phoneNumber.length !== 10) {
+      Alert.alert("Invalid Phone Number", "Phone number must be 10 digits.");
       return;
     }
 
@@ -54,90 +61,106 @@ const SignUpScreen = () => {
 
   return (
     <SafeAreaView style={homeStyles.container}>
-      <ScrollView contentContainerStyle={homeStyles.content}>
-        <View style={homeStyles.header}>
-          <Text style={homeStyles.title}>Create Account,</Text>
-          <Text style={homeStyles.subtitle}>Sign up to get started.</Text>
-        </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+      >
+        <ScrollView contentContainerStyle={homeStyles.content}>
+          <View style={homeStyles.header}>
+            <Text style={homeStyles.title}>Create Account,</Text>
+            <Text style={homeStyles.subtitle}>Sign up to get started.</Text>
+          </View>
 
-        <View style={homeStyles.card}>
-          <Text style={homeStyles.cardTitle}>Sign Up</Text>
+          <View style={homeStyles.card}>
+            <Text style={homeStyles.cardTitle}>Sign Up</Text>
 
-          <Text style={homeStyles.label}>First Name</Text>
-          <TextInput
-            style={homeStyles.input}
-            value={firstName}
-            onChangeText={setFirstName}
-            placeholderTextColor={COLORS.textLight}
-          />
+            <Text style={homeStyles.label}>First Name</Text>
+            <TextInput
+              style={homeStyles.input}
+              value={firstName}
+              onChangeText={setFirstName}
+              placeholderTextColor={COLORS.textLight}
+            />
 
-          <Text style={homeStyles.label}>Last Name</Text>
-          <TextInput
-            style={homeStyles.input}
-            value={lastName}
-            onChangeText={setLastName}
-            placeholderTextColor={COLORS.textLight}
-          />
+            <Text style={homeStyles.label}>Last Name</Text>
+            <TextInput
+              style={homeStyles.input}
+              value={lastName}
+              onChangeText={setLastName}
+              placeholderTextColor={COLORS.textLight}
+            />
 
-          <Text style={homeStyles.label}>Username</Text>
-          <TextInput
-            style={homeStyles.input}
-            value={username}
-            onChangeText={setUsername}
-            autoCapitalize="none"
-            placeholderTextColor={COLORS.textLight}
-          />
+            <Text style={homeStyles.label}>Username</Text>
+            <TextInput
+              style={homeStyles.input}
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+              placeholderTextColor={COLORS.textLight}
+            />
 
-          <Text style={homeStyles.label}>Email</Text>
-          <TextInput
-            style={homeStyles.input}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            placeholderTextColor={COLORS.textLight}
-          />
+            <Text style={homeStyles.label}>Email</Text>
+            <TextInput
+              style={homeStyles.input}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor={COLORS.textLight}
+            />
 
-          <Text style={homeStyles.label}>Phone Number</Text>
-          <TextInput
-            style={homeStyles.input}
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
-            keyboardType="phone-pad"
-            placeholderTextColor={COLORS.textLight}
-          />
+            <Text style={homeStyles.label}>Phone Number</Text>
+                      <TextInput
+                        style={homeStyles.input}
+                        value={phoneNumber}
+                        onChangeText={setPhoneNumber}
+                        keyboardType="phone-pad"
+                        placeholderTextColor={COLORS.textLight}
+                        maxLength={10}
+                      />
+            <Text style={homeStyles.label}>Password</Text>
+            <TextInput
+              style={homeStyles.input}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              placeholderTextColor={COLORS.textLight}
+            />
 
-          <Text style={homeStyles.label}>Password</Text>
-          <TextInput
-            style={homeStyles.input}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            placeholderTextColor={COLORS.textLight}
-          />
+            <TouchableOpacity
+              style={homeStyles.generateButton}
+              onPress={handleSignUp}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color={COLORS.white} />
+              ) : (
+                <>
+                  <Ionicons
+                    name="person-add-outline"
+                    size={24}
+                    color={COLORS.white}
+                  />
+                  <Text style={homeStyles.generateButtonText}>Sign Up</Text>
+                </>
+              )}
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={homeStyles.generateButton}
-            onPress={handleSignUp}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color={COLORS.white} />
-            ) : (
-              <>
-                <Ionicons name="person-add-outline" size={24} color={COLORS.white} />
-                <Text style={homeStyles.generateButtonText}>Sign Up</Text>
-              </>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.replace("/sign-in")}>
-            <Text style={{ textAlign: 'center', marginTop: 15, color: COLORS.primary }}>
-              Already have an account? Sign In
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <TouchableOpacity onPress={() => router.replace("/sign-in")}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  marginTop: 15,
+                  color: COLORS.primary,
+                }}
+              >
+                Already have an account? Sign In
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

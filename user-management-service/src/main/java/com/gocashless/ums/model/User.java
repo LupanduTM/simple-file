@@ -1,6 +1,9 @@
 package com.gocashless.ums.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +37,9 @@ public class User implements UserDetails {
     private String email;
 
     @Column(unique = true, nullable = false)
+    @NotBlank
+    @Size(min = 10, max = 10)
+    @Pattern(regexp = "[0-9]+")
     private String phoneNumber;
 
     private String firstName;
