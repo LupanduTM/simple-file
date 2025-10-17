@@ -24,8 +24,9 @@ const LoginPage = () => {
     setError('');
 
     try {
-      await authService.login(formData);
-      login();
+      const response = await authService.login(formData);
+      const { token, user } = response.data; // Assuming the response data has this structure
+      login(token, user);
       router.push('/dashboard');
     } catch (err) {
       setError('Login failed. Please check your credentials.');

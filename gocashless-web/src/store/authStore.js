@@ -1,26 +1,30 @@
 
 import { create } from 'zustand';
+import apiClient from '../lib/api/apiClient';
 
-// You might need to run: npm install zustand
-// A simple store for managing authentication state
 const useAuthStore = create((set) => ({
   user: null,
   token: null,
-  login: (token) => {
-    // In a real app, you'd decode the token for user info
-    set({ token, user: { name: 'Bus Company Owner' } });
-    localStorage.setItem('jwt_token', token);
+  loading: true,
+  checkUser: async () => {
+    try {
+      const response = await apiClient.get('/api/v1/users/me');
+      set({ user: response.data, loading: false });
+    } catch (error) {
+      set({ user: null, loading: false });
+    }
+  },
+  login: (token, user) => {
+    set({ token, user });
   },
   logout: () => {
     set({ token: null, user: null });
-    localStorage.removeItem('jwt_token');
   },
-  initialize: () => {
-    const token = localStorage.getItem('jwt_token');
-    if (token) {
-      set({ token, user: { name: 'Bus Company Owner' } });
-    }
-  }
+  setUser: (user) => {
+    set({ user });
+  },
 }));
+
+useAuthStore.getState().checkUser();
 
 export default useAuthStore;

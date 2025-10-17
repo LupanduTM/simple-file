@@ -1,9 +1,11 @@
 
 'use client';
 
+'use client';
+
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Route,
@@ -18,6 +20,7 @@ import {
   ChevronLast,
 } from 'lucide-react';
 import { QrCodeIcon } from '@/components/ui/Icons';
+import { useAuth } from '@/hooks/useAuth';
 
 const sidebarItems = [
   {
@@ -75,6 +78,13 @@ const sidebarItems = [
 export default function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   return (
     <aside className={`h-screen sticky top-0 bg-white shadow-lg transition-all ${isExpanded ? 'w-64' : 'w-20'}`}>
@@ -121,7 +131,7 @@ export default function Sidebar() {
               <h4 className="font-semibold">Admin</h4>
               <span className="text-xs text-gray-600">admin@gocashless.com</span>
             </div>
-            <LogOut size={20} className="cursor-pointer" />
+            <LogOut size={20} className="cursor-pointer" onClick={handleLogout} />
           </div>
         </div>
       </nav>

@@ -13,4 +13,8 @@ export const authService = {
   register: (userData) => {
     return apiClient.post('/api/v1/users/register/buscompany', userData);
   },
+
+  updateProfile: (userId, userData) => {
+    return apiClient.put(`/api/v1/users/update/${userId}`, userData);
+  },
 };

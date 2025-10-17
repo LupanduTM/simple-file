@@ -1,24 +1,22 @@
 
-import { useEffect } from 'react';
 import useAuthStore from '@/store/authStore';
 
 export const useAuth = () => {
   const {
     user,
     token,
+    loading,
     login,
     logout,
-    initialize,
+    setUser,
   } = useAuthStore();
 
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
-
   return {
-    user: { name: 'Bus Company Owner' },
-    token: 'fake-jwt-token',
+    user,
+    token,
+    loading,
     login,
     logout,
+    setUser,
   };
 };

@@ -1,6 +1,7 @@
 'use client';
 
 import { Search, User } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Header() {
   return (
@@ -14,7 +15,9 @@ export default function Header() {
         />
       </div>
       <div>
-        <User size={24} className="cursor-pointer" />
+        <Link href="/dashboard/profile">
+          <User size={24} className="cursor-pointer" />
+        </Link>
       </div>
     </header>
   );
