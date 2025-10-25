@@ -47,10 +47,10 @@ Default settings live in `src/main/resources/application.yml` and can be overrid
 ## Running Locally
 
 ```bash
-#### Install dependencies and run (Unix)
+# Install dependencies and run (Unix)
 ./mvnw spring-boot:run
 
-#### Windows PowerShell
+# Windows PowerShell
 .\mvnw.cmd spring-boot:run
 ```
 ### API Reference
@@ -152,21 +152,21 @@ Default properties live in `src/main/resources/application.yml` and can be overr
 
 ## Running Locally
 
-### bash
+```bash
 #### Unix/macOS
 ./mvnw spring-boot:run
 
 #### Windows PowerShell
 .\mvnw.cmd spring-boot:run
-
+```
 ### Override database credentials as needed
 
-### bash
+```bash
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/rfms_dev \
 SPRING_DATASOURCE_USERNAME=rfms_app \
 SPRING_DATASOURCE_PASSWORD=topsecret \
 ./mvnw spring-boot:run
-
+```
 ### API Reference
 ### Routes
 
@@ -250,13 +250,13 @@ Values in `src/main/resources/application.yml` can be overridden using environme
 
 ## Running Locally
 
-### bash
-#### Unix/macOS
+``` bash
+# Unix/macOS
 ./mvnw spring-boot:run
 
-#### Windows PowerShell
+# Windows PowerShell
 .\mvnw.cmd spring-boot:run
-
+```
 ### API Reference
 
 #### Transaction APIs
@@ -330,13 +330,13 @@ Default properties live in `src/main/resources/application.yml`. Override via en
 
 ## Running Locally
 
-### bash
-#### Unix/macOS
+``` bash
+# Unix/macOS
 ./mvnw spring-boot:run
 
-#### Windows PowerShell
+# Windows PowerShell
 .\mvnw.cmd spring-boot:run
-
+```
 
 ### API Reference
 
@@ -418,17 +418,17 @@ Override any of the following defaults via environment variables or command-line
 
 ## Running Locally
 
-### bash
-#### Unix/macOS
+``` bash
+# Unix/macOS
 SPRING_MAIL_USERNAME="you@example.com" \
 SPRING_MAIL_PASSWORD="app-specific-password" \
 ./mvnw spring-boot:run
 
-#### Windows PowerShell
+# Windows PowerShell
 $env:SPRING_MAIL_USERNAME="you@example.com"
 $env:SPRING_MAIL_PASSWORD="app-specific-password"
 .\mvnw.cmd spring-boot:run
-
+```
 ### API Reference
 
 | Method | Path | Description | Request Body |
@@ -497,13 +497,13 @@ The success rate is hard-coded at 90% (`Math.random() < 0.9` in the controller);
 
 ## Running Locally
 
-### bash
-#### Unix/macOS
+``` bash
+# Unix/macOS
 ./mvnw spring-boot:run
 
-#### Windows PowerShell
+# Windows PowerShell
 .\mvnw.cmd spring-boot:run
-
+```
 ### API Reference
 
 | Method | Path | Description | Request Body | Response |
@@ -512,7 +512,7 @@ The success rate is hard-coded at 90% (`Math.random() < 0.9` in the controller);
 
 ### Request Payload (`PaymentInitiationRequest`)
 
-### json
+``` json
 {
   "userId": "UUID of passenger",
   "conductorId": "UUID of conductor",
@@ -523,16 +523,16 @@ The success rate is hard-coded at 90% (`Math.random() < 0.9` in the controller);
   "currency": "ZMW",
   "paymentMethod": "MOBILE_MONEY"
 }
-
+```
 ### Response (`PaymentResponse`)
 
-### json
+``` json
 {
   "transactionId": "generated UUID or null on failure",
   "status": "SUCCESS | FAILED | ERROR",
   "message": "Human-readable outcome"
 }
-
+```
 
 ### Behavior
 
@@ -802,9 +802,9 @@ Next.js (App Router) dashboard that lets GoCashless operators manage routes, far
    - npm 10+ or pnpm 9+
 
 2. **Install dependencies**
-   ### bash
+   ``` bash
    npm install
-
+   ```
 ###  Configure API Hosts
 
 - Adjust `src/lib/api/apiClient.js`, `routeApiClient.js`, and `thsApiClient.js` to point to your gateway/services.  
@@ -813,9 +813,9 @@ Next.js (App Router) dashboard that lets GoCashless operators manage routes, far
 
 ###  Run the Dev Server
 
-### bash
+``` bash
 npm run dev
-
+```
 ### Tech Stack
 
 - **Framework:** Next.js 15 (App Router) ([package.json:1](package.json:1))
@@ -881,12 +881,12 @@ Decide which policy you want (session propagation vs. token enforcement) and rem
 
 ## Running Locally
 
-### bash
-#### from api-gateway/
+``` bash
+# from api-gateway/
 ./mvnw spring-boot:run
-#### or on Windows
+# or on Windows
 .\mvnw.cmd spring-boot:run
-
+```
 ---
 
 # Eureka Discovery Service
@@ -921,9 +921,10 @@ Expose this port to your network or tunnel it to remote clients so other service
 
 ## Running Locally
 
-###bash
-#### macOS/Linux
+```bash
+# macOS/Linux
 ./mvnw spring-boot:run
 
-#### Windows PowerShell
+# Windows PowerShell
 .\mvnw.cmd spring-boot:run
+```
