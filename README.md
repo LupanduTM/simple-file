@@ -47,12 +47,12 @@ Default settings live in `src/main/resources/application.yml` and can be overrid
 ## Running Locally
 
 ```bash
-# Install dependencies and run (Unix)
+#### Install dependencies and run (Unix)
 ./mvnw spring-boot:run
 
-# Windows PowerShell
+#### Windows PowerShell
 .\mvnw.cmd spring-boot:run
-
+```
 ### API Reference
 
 #### Authentication
@@ -152,16 +152,16 @@ Default properties live in `src/main/resources/application.yml` and can be overr
 
 ## Running Locally
 
-```bash
-# Unix/macOS
+### bash
+#### Unix/macOS
 ./mvnw spring-boot:run
 
-# Windows PowerShell
+#### Windows PowerShell
 .\mvnw.cmd spring-boot:run
 
 ### Override database credentials as needed
 
-```bash
+### bash
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/rfms_dev \
 SPRING_DATASOURCE_USERNAME=rfms_app \
 SPRING_DATASOURCE_PASSWORD=topsecret \
@@ -250,11 +250,11 @@ Values in `src/main/resources/application.yml` can be overridden using environme
 
 ## Running Locally
 
-```bash
-# Unix/macOS
+### bash
+#### Unix/macOS
 ./mvnw spring-boot:run
 
-# Windows PowerShell
+#### Windows PowerShell
 .\mvnw.cmd spring-boot:run
 
 ### API Reference
@@ -330,11 +330,11 @@ Default properties live in `src/main/resources/application.yml`. Override via en
 
 ## Running Locally
 
-```bash
-# Unix/macOS
+### bash
+#### Unix/macOS
 ./mvnw spring-boot:run
 
-# Windows PowerShell
+#### Windows PowerShell
 .\mvnw.cmd spring-boot:run
 
 
@@ -398,7 +398,7 @@ Spring Boot microservice that delivers transactional emails (credentials, welcom
 - Eureka server at `http://localhost:8761/eureka`
 - Credentials for `SPRING_MAIL_USERNAME`/`SPRING_MAIL_PASSWORD` set as environment variables or secret manager
 
-> ⚠️ The checked-in `application.yml` contains placeholder Gmail credentials; replace these with environment variables before running in shared environments.
+>  The checked-in `application.yml` contains placeholder Gmail credentials; replace these with environment variables before running in shared environments.
 
 ## Configuration
 
@@ -418,13 +418,13 @@ Override any of the following defaults via environment variables or command-line
 
 ## Running Locally
 
-```bash
-# Unix/macOS
+### bash
+#### Unix/macOS
 SPRING_MAIL_USERNAME="you@example.com" \
 SPRING_MAIL_PASSWORD="app-specific-password" \
 ./mvnw spring-boot:run
 
-# Windows PowerShell
+#### Windows PowerShell
 $env:SPRING_MAIL_USERNAME="you@example.com"
 $env:SPRING_MAIL_PASSWORD="app-specific-password"
 .\mvnw.cmd spring-boot:run
@@ -497,11 +497,11 @@ The success rate is hard-coded at 90% (`Math.random() < 0.9` in the controller);
 
 ## Running Locally
 
-```bash
-# Unix/macOS
+### bash
+#### Unix/macOS
 ./mvnw spring-boot:run
 
-# Windows PowerShell
+#### Windows PowerShell
 .\mvnw.cmd spring-boot:run
 
 ### API Reference
@@ -512,7 +512,7 @@ The success rate is hard-coded at 90% (`Math.random() < 0.9` in the controller);
 
 ### Request Payload (`PaymentInitiationRequest`)
 
-```json
+### json
 {
   "userId": "UUID of passenger",
   "conductorId": "UUID of conductor",
@@ -526,7 +526,7 @@ The success rate is hard-coded at 90% (`Math.random() < 0.9` in the controller);
 
 ### Response (`PaymentResponse`)
 
-```json
+### json
 {
   "transactionId": "generated UUID or null on failure",
   "status": "SUCCESS | FAILED | ERROR",
@@ -802,7 +802,7 @@ Next.js (App Router) dashboard that lets GoCashless operators manage routes, far
    - npm 10+ or pnpm 9+
 
 2. **Install dependencies**
-   ```bash
+   ### bash
    npm install
 
 ###  Configure API Hosts
@@ -813,7 +813,7 @@ Next.js (App Router) dashboard that lets GoCashless operators manage routes, far
 
 ###  Run the Dev Server
 
-```bash
+### bash
 npm run dev
 
 ### Tech Stack
@@ -881,10 +881,10 @@ Decide which policy you want (session propagation vs. token enforcement) and rem
 
 ## Running Locally
 
-```bash
-# from api-gateway/
+### bash
+#### from api-gateway/
 ./mvnw spring-boot:run
-# or on Windows
+#### or on Windows
 .\mvnw.cmd spring-boot:run
 
 ---
@@ -921,9 +921,9 @@ Expose this port to your network or tunnel it to remote clients so other service
 
 ## Running Locally
 
-```bash
-# macOS/Linux
+###bash
+#### macOS/Linux
 ./mvnw spring-boot:run
 
-# Windows PowerShell
+#### Windows PowerShell
 .\mvnw.cmd spring-boot:run
