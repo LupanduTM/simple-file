@@ -1,0 +1,42 @@
+
+# Test Cases for route-fare-management-service
+
+This file documents the test cases that have been implemented for the `route-fare-management-service`.
+
+## Unit Tests (FareServiceTest.java)
+
+- **testCreateFare_Success**:
+  - **Description**: This test verifies the successful creation of a fare when all dependencies return the expected data.
+  - **Given**: A valid `FareRequest` with route, origin, and destination IDs.
+  - **When**: The `createFare` method is called.
+  - **Then**: The method should return a `FareResponse` object with the correct amount.
+
+- **testCreateFare_RouteNotFound**:
+  - **Description**: This test checks if an `IllegalArgumentException` is thrown when the route is not found.
+  - **Given**: A `FareRequest` with a route ID that does not exist.
+  - **When**: The `createFare` method is called.
+  - **Then**: The method should throw an `IllegalArgumentException`.
+
+- **testCreateFare_OriginStopNotFound**:
+  - **Description**: This test checks if an `IllegalArgumentException` is thrown when the origin bus stop is not found.
+  - **Given**: A `FareRequest` with an origin stop ID that does not exist.
+  - **When**: The `createFare` method is called.
+  - **Then**: The method should throw an `IllegalArgumentException`.
+
+- **testCreateFare_DestinationStopNotFound**:
+  - **Description**: This test checks if an `IllegalArgumentException` is thrown when the destination bus stop is not found.
+  - **Given**: A `FareRequest` with a destination stop ID that does not exist.
+  - **When**: The `createFare` method is called.
+  - **Then**: The method should throw an `IllegalArgumentException`.
+
+- **testGetFareForJourney_Success**:
+  - **Description**: This test verifies the successful retrieval of a fare for a given journey.
+  - **Given**: A route, origin, and destination ID for which a fare exists.
+  - **When**: The `getFareForJourney` method is called.
+  - **Then**: The method should return an `Optional` containing the correct `FareResponse`.
+
+- **testGetFareForJourney_NotFound**:
+  - **Description**: This test verifies that an empty `Optional` is returned when a fare is not found for a given journey.
+  - **Given**: A route, origin, and destination ID for which no fare exists.
+  - **When**: The `getFareForJourney` method is called.
+  - **Then**: The method should return an empty `Optional`.

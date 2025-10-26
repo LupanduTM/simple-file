@@ -1,0 +1,61 @@
+# User Management Service Test Log
+
+## Test Run: 2025-10-25
+
+This log tracks the test cases that have been implemented and executed.
+
+### Test Case 1: shouldRegisterPassengerSuccessfully
+- **File:** `UserServiceTest.java`
+- **Type:** Unit Test
+- **Feature Tested:** User Registration (Covers REG-01 and REG-06)
+- **Scenario:** Verifies that a new passenger is created with the correct details, the password is encrypted, and a welcome notification is dispatched.
+- **Result:** PASSED
+
+### Test Case 2: contextLoads
+- **File:** `UserManagementServiceApplicationTests.java`
+- **Type:** Integration Test
+- **Feature Tested:** Application Health
+- **Scenario:** Verifies that the entire Spring Boot application context can be loaded successfully, including database and component scanning.
+- **Result:** PASSED
+
+### Test Case 3: shouldThrowExceptionWhenPhoneNumberAlreadyExists
+- **File:** `UserServiceTest.java`
+- **Type:** Unit Test
+- **Feature Tested:** User Registration (Covers REG-02 - variant for phone number)
+- **Scenario:** Verifies that the service throws an `IllegalArgumentException` when a registration is attempted with a phone number that already exists.
+- **Result:** PASSED
+
+### Test Case 4: shouldThrowExceptionWhenUsernameAlreadyExists
+- **File:** `UserServiceTest.java`
+- **Type:** Unit Test
+- **Feature Tested:** User Registration (Covers REG-02)
+- **Scenario:** Verifies that the service throws an `IllegalArgumentException` when a registration is attempted with a username that already exists.
+- **Result:** PASSED
+
+### Test Case 5: shouldLoginSuccessfullyWithValidCredentials
+- **File:** `AuthControllerTest.java`
+- **Type:** Integration Test
+- **Feature Tested:** Authentication (AUTH-01)
+- **Scenario:** Verifies that a user can successfully log in with valid credentials and receive a success message.
+- **Result:** PASSED
+
+### Test Case 6: shouldReturnUnauthorizedWithInvalidCredentials
+- **File:** `AuthControllerTest.java`
+- **Type:** Integration Test
+- **Feature Tested:** Authentication (AUTH-02)
+- **Scenario:** Verifies that the system returns a 401 Unauthorized status when a login attempt is made with invalid credentials.
+- **Result:** PASSED
+
+### Test Case 7: shouldReturnCurrentUserForMeEndpoint
+- **File:** `UserControllerTest.java`
+- **Type:** Integration Test
+- **Feature Tested:** User Profile Management (PROF-01)
+- **Scenario:** Verifies that a GET request to /api/v1/users/me by an authenticated user returns their own user profile.
+- **Result:** PASSED
+
+### Test Case 8: shouldReturnForbiddenForAdminEndpointWhenNotAdmin
+- **File:** `UserControllerTest.java`
+- **Type:** Integration Test
+- **Feature Tested:** Authorization (SEC-04)
+- **Scenario:** Verifies that a non-admin user receives a 403 Forbidden status when attempting to access an admin-only endpoint.
+- **Result:** PASSED

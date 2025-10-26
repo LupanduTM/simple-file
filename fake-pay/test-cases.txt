@@ -1,0 +1,18 @@
+
+# Test Cases for fake-pay-service
+
+This file documents the test cases that have been implemented for the `fake-pay` service.
+
+## Unit Tests (FakePaymentControllerTest.java)
+
+- **testInitiatePayment_Success**:
+  - **Description**: This test verifies the successful initiation of a payment.
+  - **Given**: A valid `PaymentInitiationRequest`.
+  - **When**: The `initiatePayment` method is called.
+  - **Then**: The method should return a `ResponseEntity` with an `OK` status and a `PaymentResponse` with a "SUCCESS" status.
+
+- **testInitiatePayment_TransactionHistoryServiceFails**:
+  - **Description**: This test verifies that the payment is still considered successful even if the `transaction-history-service` fails.
+  - **Given**: A valid `PaymentInitiationRequest`.
+  - **When**: The `TransactionHistoryServiceClient` is mocked to throw an exception.
+  - **Then**: The `initiatePayment` method should return a `ResponseEntity` with an `OK` status and a `PaymentResponse` with a "SUCCESS" status and a message indicating that the transaction history failed to be recorded.

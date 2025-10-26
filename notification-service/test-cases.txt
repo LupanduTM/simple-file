@@ -1,0 +1,24 @@
+
+# Test Cases for notification-service
+
+This file documents the test cases that have been implemented for the `notification-service`.
+
+## Unit Tests (EmailServiceTest.java)
+
+- **testSendLoginCredentials**:
+  - **Description**: This test verifies that the `sendLoginCredentials` method constructs and sends the correct email for conductor login credentials.
+  - **Given**: A `ConductorNotification` object with an email and password.
+  - **When**: The `sendLoginCredentials` method is called.
+  - **Then**: The method should send an email with the correct "from", "to", "subject", and "text" content.
+
+- **testSendPassengerWelcomeEmail**:
+  - **Description**: This test verifies that the `sendPassengerWelcomeEmail` method constructs and sends the correct welcome email for passengers.
+  - **Given**: A `PassengerNotification` object with an email, first name, last name, and registration date.
+  - **When**: The `sendPassengerWelcomeEmail` method is called.
+  - **Then**: The method should send an email with the correct "from", "to", "subject", and "text" content.
+
+- **testSendPasswordResetNotification**:
+  - **Description**: This test verifies that the `sendPasswordResetNotification` method constructs and sends the correct email for password reset notifications.
+  - **Given**: A `PasswordResetNotification` object with an email and a new password.
+  - **When**: The `sendPasswordResetNotification` method is called.
+  - **Then**: The method should send an email with the correct "from", "to", "subject", and "text" content.

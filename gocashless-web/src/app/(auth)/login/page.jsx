@@ -105,10 +105,7 @@ const LoginPage = () => {
             </button>
           </div>
 
-          <p className="text-center text-sm text-dark-text">
-            Don't have an account?{' '}
-            <a href="/register" className="font-bold text-accent hover:underline">Sign Up</a>
-          </p>
+
         </div>
       </div>
     </div>

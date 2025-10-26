@@ -1,4 +1,5 @@
-package com.gocashless.fake_pay;
+
+package com.gocashless.fakepay;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

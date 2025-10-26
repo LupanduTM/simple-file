@@ -1,0 +1,36 @@
+
+# Test Cases for transaction-history-service
+
+This file documents the test cases that have been implemented for the `transaction-history-service`.
+
+## Unit Tests (TransactionServiceTest.java)
+
+- **testCreateTransaction_Success**:
+  - **Description**: This test verifies the successful creation of a transaction.
+  - **Given**: A valid `TransactionRequest`.
+  - **When**: The `createTransaction` method is called.
+  - **Then**: The method should return a `Transaction` object with the correct user ID.
+
+- **testGetTransactionById_Success**:
+  - **Description**: This test verifies the successful retrieval of a transaction by its ID.
+  - **Given**: A transaction ID for which a transaction exists.
+  - **When**: The `getTransactionById` method is called.
+  - **Then**: The method should return an `Optional` containing the correct `TransactionResponse`.
+
+- **testGetTransactionsByUserId_Success**:
+  - **Description**: This test verifies the successful retrieval of all transactions for a given user.
+  - **Given**: A user ID for which transactions exist.
+  - **When**: The `getTransactionsByUserId` method is called.
+  - **Then**: The method should return a list of `TransactionResponse` objects for the given user.
+
+- **testGetTransactionsByConductorId_Success**:
+  - **Description**: This test verifies the successful retrieval of all transactions for a given conductor.
+  - **Given**: A conductor ID for which transactions exist.
+  - **When**: The `getTransactionsByConductorId` method is called.
+  - **Then**: The method should return a list of `TransactionResponse` objects for the given conductor.
+
+- **testGetTransactionsByDateRange_Success**:
+  - **Description**: This test verifies the successful retrieval of all transactions within a given date range.
+  - **Given**: A start and end date.
+  - **When**: The `getTransactionsByDateRange` method is called.
+  - **Then**: The method should return a list of `Transaction` objects within the given date range.

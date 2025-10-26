@@ -1,4 +1,5 @@
-package com.gocashless.notification_service;
+
+package com.gocashless.notification;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

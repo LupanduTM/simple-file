@@ -1,0 +1,24 @@
+
+# Test Cases for qr-code-generation-service
+
+This file documents the test cases that have been implemented for the `qr-code-generation-service`.
+
+## Unit Tests (QrCodeServiceTest.java)
+
+- **testGeneratePaymentQrCode_Success**:
+  - **Description**: This test verifies the successful generation of a QR code when all dependencies return the expected data.
+  - **Given**: A valid `QrGenerateRequest` with conductor, route, origin, and destination IDs.
+  - **When**: The `generatePaymentQrCode` method is called.
+  - **Then**: The method should return a `QrGenerateResponse` object with a non-null QR code image, a transaction reference, and a success message.
+
+- **testGeneratePaymentQrCode_FareNotFound**:
+  - **Description**: This test checks if an `IllegalArgumentException` is thrown when the fare information cannot be retrieved from the `ROUTE-FARE-MANAGEMENT-SERVICE`.
+  - **Given**: A valid `QrGenerateRequest`.
+  - **When**: The `RestTemplate` mock is configured to return `null` for the fare lookup call.
+  - **Then**: The `generatePaymentQrCode` method should throw an `IllegalArgumentException`.
+
+- **testGeneratePaymentQrCode_UserNotFound**:
+  - **Description**: This test checks if an `IllegalArgumentException` is thrown when the user details cannot be retrieved from the `USER-MANAGEMENT-SERVICE`.
+  - **Given**: A valid `QrGenerateRequest`.
+  - **When**: The `RestTemplate` mock is configured to return a valid fare response but `null` for the user lookup call.
+  - **Then**: The `generatePaymentQrCode` method should throw an `IllegalArgumentException`.

@@ -30,6 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> getMyProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -97,6 +98,7 @@ public class UserController {
     }
 
     @GetMapping("/admins")
+    @PreAuthorize("hasRole('GOCASHLESS_ADMIN')")
     public ResponseEntity<?> getAllAdmins() {
         var admins = userService.getAllAdmins();
         return new ResponseEntity<>(admins, HttpStatus.OK);
